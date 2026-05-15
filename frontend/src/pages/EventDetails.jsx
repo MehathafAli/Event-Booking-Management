@@ -1,0 +1,729 @@
+/*<div className="min-h-screen bg-gradient-to-b from-slate-50 to-white p-4 sm:p-6 lg:p-8">
+      <div className="mx-auto max-w-7xl">
+        
+        <div className="mb-8">
+          <div className="inline-flex rounded-full bg-purple-100 px-4 py-2 text-sm font-semibold text-purple-700">
+            {event.category}
+          </div>
+          <h1 className="mt-4 text-4xl font-bold text-slate-900">{event.title}</h1>
+          <p className="mt-3 max-w-3xl text-lg text-slate-600">{event.description}</p>
+        </div>
+
+       
+        <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
+          
+          <div>
+            
+            <div className="mb-8 flex flex-wrap gap-3">
+              {sectionNames.map((section) => (
+                <button
+                  key={section}
+                  onClick={() => setActiveSection(section)}
+                  className={`rounded-full px-5 py-2.5 text-sm font-semibold transition ${
+                    activeSection === section
+                      ? 'bg-purple-600 text-white shadow-lg'
+                      : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'
+                  }`}
+                >
+                  {section}
+                </button>
+              ))}
+            </div>
+
+            
+            <div className="grid gap-6 sm:grid-cols-2">
+              {activeItems.length > 0 ? (
+                activeItems.map((item) => (
+                  <div
+                    key={item.name}
+                    className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-md transition hover:shadow-lg"
+                  >
+                    
+                    <div className="relative h-48 w-full overflow-hidden bg-slate-100">
+                      <img
+                        src={getItemImage(item.name, activeSection)}
+                        alt={item.name}
+                        className="h-full w-full object-cover transition duration-500 hover:scale-105"
+                        onError={(e) => {
+                          e.target.src = placeholderImage
+                        }}
+                      />
+                    </div>
+
+                    
+                    <div className="p-5">
+                      <h3 className="text-lg font-bold text-slate-900">
+                        {item.name}
+                      </h3>
+
+                      <p className="mt-2 text-sm text-slate-600">
+                        {item.details || 'High quality service for your event'}
+                      </p>
+
+                      {activeSection === 'Food' && item.items?.length > 0 && (
+                        <div className="mt-3">
+                          <button
+                            onClick={() => toggleFoodDetails(item.name)}
+                            className="text-sm font-semibold text-purple-600 hover:text-purple-700"
+                          >
+                            {isFoodExpanded(item.name)
+                              ? 'Hide menu'
+                              : `Read menu (${item.items.length} items)`}
+                          </button>
+
+                          {isFoodExpanded(item.name) && (
+                            <ul className="mt-3 space-y-3 rounded-3xl bg-slate-50 p-4 text-sm text-slate-700">
+                              {item.items.map((menuItem, index) => (
+                                <li key={`${item.name}-${index}`}>
+                                  <p className="font-semibold text-slate-900">{menuItem.name}</p>
+                                  <p>{menuItem.details}</p>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
+                      )}
+
+                      
+                      <div className="mt-4 flex items-center justify-between">
+                        <span className="text-2xl font-bold text-slate-900">
+                          ₹{item.price.toLocaleString()}
+                        </span>
+                        {item.type === 'perPerson' && (
+                          <span className="text-xs text-slate-500">per guest</span>
+                        )}
+                      </div>
+
+                      
+                      <button
+                        onClick={() => handleAddToPackage(item)}
+                        disabled={isInPackage(item)}
+                        className={`mt-5 w-full rounded-2xl py-3 text-sm font-bold transition ${
+                          isInPackage(item)
+                            ? 'bg-slate-200 text-slate-500 cursor-not-allowed'
+                            : 'bg-purple-600 text-white hover:bg-purple-700 shadow-lg'
+                        }`}
+                      >
+                        {isInPackage(item) ? '✓ Added' : 'Add to Package'}
+                      </button>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="col-span-full rounded-3xl border border-slate-200 bg-slate-50 p-12 text-center">
+                  <p className="text-slate-500">No items available for {activeSection.toLowerCase()}.</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="sticky top-6 h-fit">
+            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-lg">
+              
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-slate-900">
+                  🎁 Your Package
+                </h2>
+                <p className="mt-1 text-sm text-slate-500">
+                  {packageItems.length === 0
+                    ? 'Start adding items to your package'
+                    : `${packageItems.length} item${packageItems.length !== 1 ? 's' : ''} selected`}
+                </p>
+              </div>
+
+              
+              <div className="mb-6 max-h-64 overflow-y-auto space-y-4">
+                {packageItems.length > 0 ? (
+                  packageItems.map((item) => (
+                    <div
+                      key={item.name}
+                      className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
+                    >
+                      <div className="flex items-start justify-between gap-2 mb-3">
+                        <div className="flex-1">
+                          <p className="font-semibold text-slate-900">{item.name}</p>
+                          <p className="text-xs text-slate-500 mt-1">
+                            {formatPrice(item)}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => handleRemoveItem(item.name)}
+                          className="text-xl text-red-500 hover:text-red-700 font-bold"
+                        >
+                          ×
+                        </button>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <label className="text-xs text-slate-600">Qty:</label>
+                        <input
+                          type="number"
+                          min="1"
+                          value={item.quantity}
+                          onChange={(e) =>
+                            handleQuantityChange(item.name, e.target.value)
+                          }
+                          className="w-16 rounded-lg border border-slate-300 px-2 py-1 text-sm text-center"
+                        />
+                      </div>
+
+                      
+                      <p className="mt-2 text-right text-sm font-semibold text-slate-900">
+                        ₹{itemTotal(item).toLocaleString()}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-6 text-center">
+                    <p className="text-sm text-slate-500">
+                      No items added yet
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              <div className="mb-6 space-y-3 border-t border-slate-200 pt-4">
+                <div className="flex items-center justify-between text-sm">
+                  <label className="text-slate-600">Event Date:</label>
+                  <input
+                    type="date"
+                    value={eventDate}
+                    onChange={(e) => setEventDate(e.target.value)}
+                    className="rounded-lg border border-slate-300 px-2 py-1 text-sm"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between text-sm">
+                  <label className="text-slate-600">Guest Count:</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={guestCount}
+                    onChange={(e) => setGuestCount(Number(e.target.value) || 1)}
+                    className="w-20 rounded-lg border border-slate-300 px-2 py-1 text-sm text-center"
+                  />
+                </div>
+              </div>
+
+              <div className="mb-6 space-y-3 border-t border-slate-200 pt-4 text-sm">
+                <div className="flex justify-between text-slate-600">
+                  <span>Subtotal</span>
+                  <span>₹{subtotal.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between text-slate-600">
+                  <span>Advance (50%)</span>
+                  <span>₹{advance.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between border-t border-slate-200 pt-3 text-lg font-bold text-slate-900">
+                  <span>Total</span>
+                  <span>₹{totalAmount.toLocaleString()}</span>
+                </div>
+              </div>
+
+              <button
+                disabled={packageItems.length === 0}
+                className="w-full rounded-2xl bg-purple-600 px-4 py-3 text-sm font-bold text-white shadow-lg transition hover:bg-purple-700 disabled:bg-slate-300 disabled:cursor-not-allowed"
+              >
+                Confirm Package
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>*/
+
+
+
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import API from '../services/api'
+import sampleEvents from '../data/events'
+import { useNavigate, useParams } from 'react-router-dom'
+
+// Image mapping for different item types
+const getItemImage = (itemName, section) => {
+  const name = itemName.toLowerCase()
+
+  // Function Halls
+  if (section === 'Function Halls') {
+    if (name.includes('grand')) return 'https://images.unsplash.com/photo-1519167758481-83f19106ae4f?auto=format&fit=crop&w=500&q=60'
+    if (name.includes('premium')) return 'https://images.unsplash.com/photo-1544101182-87f055ede69f?auto=format&fit=crop&w=500&q=60'
+    if (name.includes('lawn') || name.includes('garden')) return 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=500&q=60'
+    return 'https://images.unsplash.com/photo-1519167758481-83f19106ae4f?auto=format&fit=crop&w=500&q=60'
+  }
+
+  // Food
+  if (section === 'Food') {
+    if (name.includes('vegetarian') || name.includes('veg')) return 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=60'
+    if (name.includes('non-veg') || name.includes('chicken') || name.includes('biryani')) return 'https://images.unsplash.com/photo-1585937421612-29d7efb388f6?auto=format&fit=crop&w=500&q=60'
+    if (name.includes('cake') || name.includes('dessert')) return 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=500&q=60'
+    return 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=60'
+  }
+
+  // Decorations
+  if (section === 'Decorations') {
+    if (name.includes('floral') || name.includes('flower')) return 'https://images.unsplash.com/photo-1564399579883-451a5d44e67d?auto=format&fit=crop&w=500&q=60'
+    if (name.includes('stage') || name.includes('backdrop')) return 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&w=500&q=60'
+    if (name.includes('lighting') || name.includes('drape')) return 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=500&q=60'
+    return 'https://images.unsplash.com/photo-1564399579883-451a5d44e67d?auto=format&fit=crop&w=500&q=60'
+  }
+
+  // Services
+  if (section === 'Services') {
+    if (name.includes('music') || name.includes('dj') || name.includes('band')) return 'https://images.unsplash.com/photo-1511379938547-c1f69b13d835?auto=format&fit=crop&w=500&q=60'
+    if (name.includes('photography') || name.includes('photo')) return 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?auto=format&fit=crop&w=500&q=60'
+    if (name.includes('dance') || name.includes('performance')) return 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=500&q=60'
+    return 'https://images.unsplash.com/photo-1511379938547-c1f69b13d835?auto=format&fit=crop&w=500&q=60'
+  }
+
+  return 'https://images.unsplash.com/photo-1519167758481-83f19106ae4f?auto=format&fit=crop&w=500&q=60'
+}
+
+export default function EventDetails() {
+  const { id } = useParams()
+  const eventId = Number(id)
+
+  const [event, setEvent] = useState(
+    sampleEvents.find((item) => item.id === eventId) ?? null
+  )
+
+  const placeholderImage =
+    'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80'
+
+  useEffect(() => {
+    async function fetchEvent() {
+      try {
+        const response = await API.get(`events/${id}/`)
+        console.log(response.data)
+        setEvent(response.data)
+      } catch (error) {
+        console.error(error)
+        setEvent(
+          sampleEvents.find((item) => item.id === eventId) ?? null
+        )
+      }
+    }
+
+    fetchEvent()
+  }, [id, eventId])
+
+  if (!event) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <p className="text-lg text-slate-500">Loading event details...</p>
+      </div>
+    )
+  }
+
+  // Organize items by section
+  const sections = {
+    'Function Halls': [],
+    Food: [],
+    Decorations: [],
+    Services: [],
+  }
+
+  const getSection = (item) => {
+    if (item.section) {
+      return item.section
+    }
+
+    const name = item.name.toLowerCase()
+
+    if (name.includes('hall') || name.includes('stage') || name.includes('venue')) {
+      return 'Function Halls'
+    }
+    if (name.includes('decor') || name.includes('flower') || name.includes('theme')) {
+      return 'Decorations'
+    }
+    if (name.includes('food') || name.includes('catering') || name.includes('cake') || name.includes('beverage')) {
+      return 'Food'
+    }
+    return 'Services'
+  }
+
+  event.pricing?.forEach((item) => {
+    const section = getSection(item)
+    sections[section].push(item)
+  })
+
+  const sectionNames = Object.keys(sections)
+  const [activeSection, setActiveSection] = useState(sectionNames[0])
+  const [packageItems, setPackageItems] = useState([])
+  const [guestCount, setGuestCount] = useState(1)
+  const [eventDate, setEventDate] = useState('')
+  const [expandedFood, setExpandedFood] = useState({})
+  const [eventDate, setEventDate] = useState('')
+
+  const toggleFoodDetails = (name) =>
+    setExpandedFood((prev) => ({ ...prev, [name]: !prev[name] }))
+
+  const isFoodExpanded = (name) => !!expandedFood[name]
+
+  const activeItems = sections[activeSection] || []
+
+  const isInPackage = (item) =>
+    packageItems.some((packageItem) => packageItem.name === item.name)
+
+  const handleAddToPackage = (item) => {
+    setPackageItems((prev) => {
+      const existing = prev.find((packageItem) => packageItem.name === item.name)
+      if (existing) {
+        return prev.map((packageItem) =>
+          packageItem.name === item.name
+            ? { ...packageItem, quantity: packageItem.quantity + 1 }
+            : packageItem
+        )
+      }
+      return [...prev, { ...item, quantity: 1 }]
+    })
+  }
+
+  const handleRemoveItem = (name) => {
+    setPackageItems((prev) => prev.filter((item) => item.name !== name))
+  }
+
+  const handleQuantityChange = (name, value) => {
+    const quantity = Math.max(1, Number(value) || 1)
+    setPackageItems((prev) =>
+      prev.map((item) =>
+        item.name === name ? { ...item, quantity } : item
+      )
+    )
+  }
+
+  const formatPrice = (item) =>
+    item.type === 'perPerson'
+      ? `₹${item.price.toLocaleString()} / person`
+      : `₹${item.price.toLocaleString()}`
+
+  const itemTotal = (item) =>
+    item.type === 'perPerson'
+      ? item.price * guestCount * item.quantity
+      : item.price * item.quantity
+
+  const subtotal = packageItems.reduce(
+    (sum, item) => sum + itemTotal(item),
+    0
+  )
+  const advance = Math.round(subtotal * 0.5)
+  const totalAmount = subtotal
+
+  return (
+  <div className="min-h-screen bg-[#f8f5f0] py-16">
+  <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
+    {/* HERO */}
+
+    <div className="overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-[#f4e8dc] via-[#f8f5f0] to-[#efe3d5] px-8 py-12 shadow-lg sm:px-10 lg:px-14">
+      <div className="max-w-4xl">
+        <div className="inline-flex rounded-full border border-[#d6c3af] bg-white/80 px-5 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-[#8b5e34] shadow-sm">
+          {event.category}
+        </div>
+
+        <h1 className="mt-6 text-4xl font-bold tracking-tight text-[#1f2937] sm:text-5xl lg:text-6xl">
+          {event.title}
+        </h1>
+
+        <p className="mt-6 max-w-3xl text-base leading-8 text-[#5b6470] sm:text-lg">
+          {event.description}
+        </p>
+      </div>
+    </div>
+
+    {/* MAIN SECTION */}
+
+    <div className="mt-12 grid gap-8 lg:grid-cols-[1fr_380px]">
+      {/* LEFT */}
+
+      <div>
+        {/* TABS */}
+
+        <div className="mb-8 flex flex-wrap gap-3">
+          {sectionNames.map((section) => (
+            <button
+              key={section}
+              onClick={() => setActiveSection(section)}
+              className={`rounded-full px-5 py-2 text-sm font-semibold transition ${
+                activeSection === section
+                  ? 'bg-[#8b5e34] text-white shadow-md'
+                  : 'bg-white text-[#5b6470] shadow-sm hover:bg-[#f4e8dc]'
+              }`}
+            >
+              {section}
+            </button>
+          ))}
+        </div>
+
+        {/* ITEMS */}
+
+        <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+          {activeItems.length > 0 ? (
+            activeItems.map((item) => (
+              <div
+                key={item.name}
+                className="overflow-hidden rounded-[2rem] bg-white shadow-md transition duration-300 hover:-translate-y-1"
+              >
+                {/* IMAGE */}
+
+                <div className="relative h-52 overflow-hidden">
+                  <img
+                    src={getItemImage(item.name, activeSection)}
+                    alt={item.name}
+                    className="h-full w-full object-cover transition duration-500 hover:scale-105"
+                  />
+                </div>
+
+                {/* CONTENT */}
+
+                <div className="p-5">
+                  <h3 className="text-xl font-bold text-[#1f2937]">
+                    {item.name}
+                  </h3>
+
+                  <p className="mt-3 text-sm leading-7 text-[#5b6470]">
+                    {item.details ||
+                      'Premium quality service for your event.'}
+                  </p>
+
+                  {/* FOOD MENU */}
+
+                  {activeSection === 'Food' &&
+                    item.items?.length > 0 && (
+                      <div className="mt-4">
+                        <button
+                          onClick={() =>
+                            toggleFoodDetails(item.name)
+                          }
+                          className="rounded-full bg-[#f4e8dc] px-4 py-2 text-xs font-semibold text-[#8b5e34] transition hover:bg-[#ead9c5]"
+                        >
+                          {isFoodExpanded(item.name)
+                            ? 'Hide Menu'
+                            : `View Menu (${item.items.length})`}
+                        </button>
+
+                        {isFoodExpanded(item.name) && (
+                          <div className="mt-4 rounded-[1.5rem] bg-[#faf7f2] p-4">
+                            <div className="space-y-3">
+                              {item.items.map(
+                                (menuItem, index) => (
+                                  <div
+                                    key={`${item.name}-${index}`}
+                                    className="rounded-xl bg-white p-3 shadow-sm"
+                                  >
+                                    <p className="text-sm font-semibold text-[#1f2937]">
+                                      {menuItem.name}
+                                    </p>
+
+                                    <p className="mt-1 text-xs leading-6 text-[#5b6470]">
+                                      {menuItem.details}
+                                    </p>
+                                  </div>
+                                )
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                  {/* PRICE */}
+
+                  <div className="mt-6 flex items-center justify-between">
+                    <div>
+                      <p className="text-2xl font-bold text-[#8b5e34]">
+                        ₹{item.price.toLocaleString()}
+                      </p>
+
+                      {item.type === 'perPerson' && (
+                        <p className="mt-1 text-xs text-[#5b6470]">
+                          Per Guest
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* BUTTON */}
+
+                  <button
+                    onClick={() =>
+                      handleAddToPackage(item)
+                    }
+                    disabled={isInPackage(item)}
+                    className={`mt-6 w-full rounded-full py-3 text-sm font-semibold transition ${
+                      isInPackage(item)
+                        ? 'cursor-not-allowed bg-[#e7ddd2] text-[#8b5e34]'
+                        : 'bg-[#8b5e34] text-white hover:bg-[#714a28]'
+                    }`}
+                  >
+                    {isInPackage(item)
+                      ? 'Added'
+                      : 'Add To Package'}
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="col-span-full rounded-[2rem] bg-white p-8 text-center shadow-md">
+              <p className="text-[#5b6470]">
+                No items available.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* RIGHT PACKAGE */}
+
+      <div className="lg:sticky lg:top-8 lg:h-fit">
+        <div className="rounded-[2.5rem] bg-white p-6 shadow-lg">
+          {/* HEADER */}
+
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#8b5e34]">
+              YOUR PACKAGE
+            </p>
+
+            <h2 className="mt-4 text-3xl font-bold text-[#1f2937]">
+              Summary
+            </h2>
+
+            <p className="mt-3 text-sm leading-7 text-[#5b6470]">
+              Customize and calculate your event package.
+            </p>
+          </div>
+
+          {/* PACKAGE ITEMS */}
+
+          <div className="mt-8 space-y-4">
+            {packageItems.length > 0 ? (
+              packageItems.map((item) => (
+                <div
+                  key={item.name}
+                  className="rounded-[1.5rem] bg-[#f8f5f0] p-4"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <h3 className="text-base font-bold text-[#1f2937]">
+                        {item.name}
+                      </h3>
+
+                      <p className="mt-1 text-xs text-[#5b6470]">
+                        {formatPrice(item)}
+                      </p>
+                    </div>
+
+                    <button
+                      onClick={() =>
+                        handleRemoveItem(item.name)
+                      }
+                      className="text-xl font-bold text-red-500"
+                    >
+                      ×
+                    </button>
+                  </div>
+
+                  {/* QTY */}
+
+                  <div className="mt-4 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <p className="text-xs font-medium text-[#5b6470]">
+                        Qty
+                      </p>
+
+                      <input
+                        type="number"
+                        min="1"
+                        value={item.quantity}
+                        onChange={(e) =>
+                          handleQuantityChange(
+                            item.name,
+                            e.target.value
+                          )
+                        }
+                        className="w-16 rounded-lg border border-[#d9c9b8] bg-white px-2 py-1 text-center text-sm outline-none"
+                      />
+                    </div>
+
+                    <p className="text-base font-bold text-[#8b5e34]">
+                      ₹
+                      {itemTotal(item).toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="rounded-[1.5rem] bg-[#f8f5f0] p-6 text-center">
+                <p className="text-sm text-[#5b6470]">
+                  No items added yet.
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* FORM */}
+
+          <div className="mt-8 space-y-5 border-t border-[#ece3d9] pt-6">
+            <div>
+              <label className="text-xs font-semibold uppercase tracking-wide text-[#1f2937]">
+                Event Date
+              </label>
+
+              <input
+                type="date"
+                value={eventDate}
+                onChange={(e) =>
+                  setEventDate(e.target.value)
+                }
+                className="mt-2 w-full rounded-xl border border-[#d9c9b8] bg-[#faf7f2] px-4 py-3 text-sm outline-none"
+              />
+            </div>
+
+            <div>
+              
+            </div>
+          </div>
+
+          {/* PRICE */}
+
+          <div className="mt-8 space-y-4 border-t border-[#ece3d9] pt-6">
+            <div className="flex justify-between text-sm text-[#5b6470]">
+              <span>Subtotal</span>
+
+              <span>
+                ₹{subtotal.toLocaleString()}
+              </span>
+            </div>
+
+            <div className="flex justify-between text-sm text-[#5b6470]">
+              <span>Advance</span>
+
+              <span>
+                ₹{advance.toLocaleString()}
+              </span>
+            </div>
+
+            <div className="flex justify-between border-t border-[#ece3d9] pt-4 text-xl font-bold text-[#1f2937]">
+              <span>Total</span>
+
+              <span>
+                ₹{totalAmount.toLocaleString()}
+              </span>
+            </div>
+          </div>
+
+          {/* BUTTON */}
+
+          <button
+            disabled={packageItems.length === 0}
+            className="mt-8 w-full rounded-full bg-[#8b5e34] px-6 py-3 text-base font-semibold text-white transition hover:bg-[#714a28] disabled:cursor-not-allowed disabled:bg-[#d8cabb]"
+          >
+            Confirm Package
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+  )
+}
