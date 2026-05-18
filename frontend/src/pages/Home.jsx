@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import sampleEvents from '../data/events'
+import { getEventCoverImage } from '../utils/images'
 
 const services = [
   {
@@ -282,9 +283,12 @@ export default function Home() {
               >
                 <div className="h-80 overflow-hidden">
                   <img
-                    src={event.images?.[0]}
+                    src={getEventCoverImage(event)}
                     alt={event.title}
                     className="h-full w-full object-cover transition duration-500 hover:scale-105"
+                    onError={(e) => {
+                      e.currentTarget.src = getEventCoverImage({})
+                    }}
                   />
                 </div>
 

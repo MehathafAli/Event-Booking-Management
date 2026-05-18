@@ -118,21 +118,13 @@ export default function BookingSuccess() {
         <div className="mt-10 rounded-[2.5rem] bg-white p-8 shadow-lg">
           <h2 className="text-2xl font-bold text-[#1f2937]">Package Details</h2>
 
-          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+          <div className="mt-6">
             <div className="rounded-[1.5rem] bg-[#f8f5f0] p-4">
               <p className="text-xs font-semibold uppercase tracking-wide text-[#8b5e34]">
                 Event Date
               </p>
               <p className="mt-2 font-semibold text-[#1f2937]">
                 {booking.booking_date}
-              </p>
-            </div>
-            <div className="rounded-[1.5rem] bg-[#f8f5f0] p-4">
-              <p className="text-xs font-semibold uppercase tracking-wide text-[#8b5e34]">
-                Guest Count
-              </p>
-              <p className="mt-2 font-semibold text-[#1f2937]">
-                {booking.guest_count}
               </p>
             </div>
           </div>

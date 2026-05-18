@@ -2,34 +2,23 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import API from '../services/api'
 import sampleEvents from '../data/events'
+import { getEventCoverImage } from '../utils/images'
 
 export default function Events() {
-  const [events, setEvents] = useState(sampleEvents)
+  const [events, setEvents] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function fetchEvents() {
       try {
         const response = await API.get('events/')
-
-        // backend events
-        const backendEvents = Array.isArray(
-          response.data
-        )
-          ? response.data
-          : []
-
-        // merge local + backend
-        const mergedEvents = [
-          ...sampleEvents,
-          ...backendEvents,
-        ]
-
-        setEvents(mergedEvents)
+        const backendEvents = Array.isArray(response.data) ? response.data : []
+        setEvents(backendEvents.length > 0 ? backendEvents : sampleEvents)
       } catch (error) {
         console.error(error)
-
-        // fallback
         setEvents(sampleEvents)
+      } finally {
+        setLoading(false)
       }
     }
 
@@ -137,6 +126,16 @@ export default function Events() {
           {/* GRID */}
 
           <div className="mt-16 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+            {loading && (
+              <p className="col-span-full text-center text-[#5b6470]">
+                Loading events...
+              </p>
+            )}
+            {!loading && events.length === 0 && (
+              <p className="col-span-full text-center text-[#5b6470]">
+                No events found.
+              </p>
+            )}
             {events.map((event) => (
               <Link
                 key={event.id}
@@ -145,14 +144,15 @@ export default function Events() {
               >
                 {/* IMAGE */}
 
-                <div className="relative h-50 overflow-hidden">
+                <div className="relative h-64 overflow-hidden">
                   <img
-                    src={
-                      event.images?.[0] ||
-                      'https://images.unsplash.com/photo-1519167758481-83f19106ae4f?auto=format&fit=crop&w=1200&q=80'
-                    }
+                    src={getEventCoverImage(event)}
                     alt={event.title}
                     className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                    onError={(e) => {
+                      e.currentTarget.src =
+                        'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1200&q=80'
+                    }}
                   />
 
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent" />

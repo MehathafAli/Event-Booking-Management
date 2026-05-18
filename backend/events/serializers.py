@@ -18,6 +18,7 @@ class EventSerializer(serializers.ModelSerializer):
             'category',
             'location',
             'excerpt',
+            'images',
             'pricing',
             'services',
         ]

@@ -1,0 +1,1136 @@
+[
+  {
+    "id": 1,
+    "title": "Royal Wedding Celebration",
+    "category": "Wedding",
+    "location": "Hyderabad",
+    "description": "Luxury wedding setup with premium halls, grand decorations, delicious food, and entertainment services.",
+    "excerpt": "Choose wedding halls, floral decorations, live food counters, DJ, photography, and more.",
+    "pricing": [
+      {
+        "name": "Royal Palace Hall",
+        "section": "Function Halls",
+        "price": 180000,
+        "type": "fixed",
+        "details": "Luxury indoor hall with seating for 500 guests.",
+        "image": "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Garden Lawn Venue",
+        "section": "Function Halls",
+        "price": 120000,
+        "type": "fixed",
+        "details": "Outdoor lawn setup with lighting and stage.",
+        "image": "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Grand Ballroom Hall",
+        "section": "Function Halls",
+        "price": 220000,
+        "type": "fixed",
+        "details": "Spacious indoor ballroom with premium seating and stage.",
+        "image": "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Floral Decoration",
+        "section": "Decorations",
+        "price": 35000,
+        "type": "fixed",
+        "details": "Fresh flower stage and entrance decoration.",
+        "image": "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "LED Stage Decoration",
+        "section": "Decorations",
+        "price": 45000,
+        "type": "fixed",
+        "details": "Premium LED backdrop with lighting effects.",
+        "image": "https://images.unsplash.com/photo-1505236858219-8359eb29e329?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Entrance Floral Arch",
+        "section": "Decorations",
+        "price": 15000,
+        "type": "fixed",
+        "details": "Large floral arch at the venue entrance.",
+        "image": "https://images.unsplash.com/photo-1518679991726-2daf1f3e8584?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Aisle Lighting",
+        "section": "Decorations",
+        "price": 12000,
+        "type": "fixed",
+        "details": "Ambient aisle lighting with lanterns and candles.",
+        "image": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Table Centerpieces",
+        "section": "Decorations",
+        "price": 9000,
+        "type": "fixed",
+        "details": "Custom floral centerpieces for guest tables.",
+        "image": "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Veg Buffet",
+        "section": "Food",
+        "diet": "veg",
+        "price": 850,
+        "type": "perPerson",
+        "details": "Complete vegetarian buffet with desserts.",
+        "image": "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Deluxe Veg Buffet",
+        "section": "Food",
+        "diet": "veg",
+        "price": 1100,
+        "type": "perPerson",
+        "details": "Premium vegetarian buffet with specialty mains and dessert selection.",
+        "items": [
+          {
+            "name": "Paneer Lababdar",
+            "details": "Creamy paneer cooked in rich tomato gravy."
+          },
+          {
+            "name": "Vegetable Biryani",
+            "details": "Aromatic biryani with saffron, nuts, and mixed vegetables."
+          },
+          {
+            "name": "Tawa Sabzi",
+            "details": "Assorted seasonal vegetables with Indian spices."
+          },
+          {
+            "name": "Gulab Jamun & Rasmalai",
+            "details": "Traditional Indian desserts served warm."
+          }
+        ],
+        "image": "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Non-Veg Buffet",
+        "section": "Food",
+        "diet": "non-veg",
+        "price": 1250,
+        "type": "perPerson",
+        "details": "Premium chicken, mutton, and seafood buffet.",
+        "image": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Deluxe Non-Veg Buffet",
+        "section": "Food",
+        "diet": "non-veg",
+        "price": 1450,
+        "type": "perPerson",
+        "details": "Deluxe non-veg buffet with chef specialties and live carving stations.",
+        "items": [
+          {
+            "name": "Butter Chicken",
+            "details": "Creamy chicken dish with soft naan."
+          },
+          {
+            "name": "Mutton Rogan Josh",
+            "details": "Slow-cooked mutton in aromatic spices."
+          },
+          {
+            "name": "Seafood Prawns Masala",
+            "details": "Spicy prawns cooked in a rich gravy."
+          },
+          {
+            "name": "Mixed Tandoori Platter",
+            "details": "Grilled chicken, kebabs, and medallions."
+          }
+        ],
+        "image": "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Live Street Food Package",
+        "section": "Food",
+        "diet": "veg",
+        "price": 280,
+        "type": "perPerson",
+        "details": "Live street food counters with popular snacks and quick bites.",
+        "items": [
+          {
+            "name": "Pani Puri Station",
+            "details": "Crispy puris filled with spicy water and chutneys."
+          },
+          {
+            "name": "Chaat Counter",
+            "details": "Mix of papdi chaat, dahi puri, and bhel puri."
+          },
+          {
+            "name": "Kathi Roll Stall",
+            "details": "Veg and chicken rolls with sauces."
+          },
+          {
+            "name": "Fresh Juices",
+            "details": "Seasonal fruit juices and mocktails."
+          }
+        ],
+        "image": "https://images.unsplash.com/photo-1523473827532-45a0f1c3d636?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Live Dosa Counter",
+        "section": "Food",
+        "diet": "veg",
+        "price": 180,
+        "type": "perPerson",
+        "details": "Fresh live dosa station for guests.",
+        "image": "https://images.unsplash.com/photo-1630383249896-424e482df921?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Ice Cream Counter",
+        "section": "Food",
+        "diet": "veg",
+        "price": 200,
+        "type": "perPerson",
+        "details": "Live ice cream and dessert station.",
+        "image": "https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "DJ Music",
+        "section": "Services",
+        "price": 25000,
+        "type": "fixed",
+        "details": "DJ setup with lights and sound system.",
+        "image": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Photography & Videography",
+        "section": "Services",
+        "price": 50000,
+        "type": "fixed",
+        "details": "Professional wedding photography coverage.",
+        "image": "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Drone Shooting",
+        "section": "Services",
+        "price": 18000,
+        "type": "fixed",
+        "details": "Aerial cinematic wedding video coverage.",
+        "image": "https://images.unsplash.com/photo-1473968512647-3e447244af8f?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Live Orchestra",
+        "section": "Services",
+        "price": 32000,
+        "type": "fixed",
+        "details": "Live orchestra performance for the ceremony.",
+        "image": "https://images.unsplash.com/photo-1511379938547-c1f69b13d835?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Photo Booth",
+        "section": "Services",
+        "price": 15000,
+        "type": "fixed",
+        "details": "Photo booth with props and instant prints.",
+        "image": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Event Host",
+        "section": "Services",
+        "price": 12000,
+        "type": "fixed",
+        "details": "Professional host to coordinate the event flow.",
+        "image": "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1200&q=80"
+      }
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "Birthday Party Celebration",
+    "category": "Birthday",
+    "location": "Hyderabad",
+    "description": "Fun birthday setup with theme decorations, games, food counters, and music.",
+    "excerpt": "Colorful birthday party with cake table, balloons, games, and DJ.",
+    "pricing": [
+      {
+        "name": "Party Hall Rental",
+        "section": "Function Halls",
+        "price": 55000,
+        "type": "fixed",
+        "details": "Indoor celebration hall with birthday-themed lighting and seating for 120.",
+        "image": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Garden Party Lawn",
+        "section": "Function Halls",
+        "price": 42000,
+        "type": "fixed",
+        "details": "Outdoor birthday lawn with party tents and lounge seating.",
+        "image": "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Theme Decoration",
+        "section": "Decorations",
+        "price": 6000,
+        "type": "fixed",
+        "details": "Customized birthday decoration theme with balloons and streamers.",
+        "image": "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Cake Table Setup",
+        "section": "Decorations",
+        "price": 2500,
+        "type": "fixed",
+        "details": "Special decorated cake cutting table with matching props.",
+        "image": "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Balloon Arch",
+        "section": "Decorations",
+        "price": 5000,
+        "type": "fixed",
+        "details": "Colorful balloon arch entrance for the party venue.",
+        "image": "https://images.unsplash.com/photo-1516117172878-fd2c41f4a759?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Birthday Photo Wall",
+        "section": "Decorations",
+        "price": 4200,
+        "type": "fixed",
+        "details": "Instagram-ready photo wall with custom birthday signage.",
+        "image": "https://images.unsplash.com/photo-1526045612212-70caf35c14df?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Birthday Meal",
+        "section": "Food",
+        "price": 650,
+        "type": "perPerson",
+        "details": "Veg and non-veg birthday meal package with live counters.",
+        "items": [
+          {
+            "name": "Mini Burgers",
+            "details": "Soft buns with veg and chicken patties."
+          },
+          {
+            "name": "Pasta Salad",
+            "details": "Creamy pasta with fresh veggies."
+          },
+          {
+            "name": "Fruit Shots",
+            "details": "Refreshing seasonal fruit shooters."
+          },
+          {
+            "name": "Birthday Cupcakes",
+            "details": "Assorted cupcakes with colorful frosting."
+          }
+        ],
+        "image": "https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Cupcake Tower",
+        "section": "Food",
+        "price": 24000,
+        "type": "fixed",
+        "details": "Decorative cupcake display with custom cake topper.",
+        "items": [
+          {
+            "name": "Vanilla Cupcakes",
+            "details": "Classic vanilla with buttercream."
+          },
+          {
+            "name": "Chocolate Cupcakes",
+            "details": "Rich chocolate with ganache."
+          },
+          {
+            "name": "Red Velvet Cupcakes",
+            "details": "Soft red velvet with cream cheese icing."
+          }
+        ],
+        "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Dessert Bar",
+        "section": "Food",
+        "price": 520,
+        "type": "perPerson",
+        "details": "Sweet table with brownies, cookies, and plated desserts.",
+        "items": [
+          {
+            "name": "Brownie Bites",
+            "details": "Rich chocolate brownies with nuts."
+          },
+          {
+            "name": "Cookie Platter",
+            "details": "Assorted cookies with dip sauces."
+          },
+          {
+            "name": "Mini Cheesecakes",
+            "details": "Creamy cheesecake cups with toppings."
+          }
+        ],
+        "image": "https://images.unsplash.com/photo-1499639130540-a8e8305f8c05?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Magic Show",
+        "section": "Services",
+        "price": 5000,
+        "type": "fixed",
+        "details": "Entertainment magic show for kids.",
+        "image": "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Party DJ",
+        "section": "Services",
+        "price": 7000,
+        "type": "fixed",
+        "details": "DJ with party lights and playlist for dancing.",
+        "image": "https://images.unsplash.com/photo-1511379938547-c1f69b13d835?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Face Painting",
+        "section": "Services",
+        "price": 4200,
+        "type": "fixed",
+        "details": "Creative face painting station for kids.",
+        "image": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Party Photographer",
+        "section": "Services",
+        "price": 9000,
+        "type": "fixed",
+        "details": "Photography coverage for birthday memories.",
+        "image": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=80"
+      }
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=1200&q=80"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Corporate Event",
+    "category": "Corporate",
+    "location": "Hyderabad",
+    "description": "Professional corporate event setup with conference halls, catering, branding, and entertainment.",
+    "excerpt": "Corporate meetings, annual celebrations, seminars, and networking events.",
+    "pricing": [
+      {
+        "name": "Conference Hall",
+        "section": "Function Halls",
+        "price": 90000,
+        "type": "fixed",
+        "details": "Premium corporate conference hall setup.",
+        "image": "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Boardroom Meeting Room",
+        "section": "Function Halls",
+        "price": 65000,
+        "type": "fixed",
+        "details": "Executive boardroom with AV screens and premium seating for 40.",
+        "image": "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Executive Networking Lounge",
+        "section": "Function Halls",
+        "price": 78000,
+        "type": "fixed",
+        "details": "Elegant lounge space for networking sessions and VIP guests.",
+        "image": "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Corporate Buffet",
+        "section": "Food",
+        "price": 950,
+        "type": "perPerson",
+        "details": "Professional buffet with veg and non-veg items.",
+        "items": [
+          {
+            "name": "Grilled Chicken",
+            "details": "Tender grilled chicken with herb sauce."
+          },
+          {
+            "name": "Paneer Tikka",
+            "details": "Spiced paneer cubes with charred edges."
+          },
+          {
+            "name": "Green Salad",
+            "details": "Fresh greens with vinaigrette dressing."
+          },
+          {
+            "name": "Brownies & Pastries",
+            "details": "Assorted sweet bites for dessert."
+          }
+        ],
+        "image": "https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Executive Lunch Buffet",
+        "section": "Food",
+        "price": 1150,
+        "type": "perPerson",
+        "details": "Executive lunch menu with gourmet plated options.",
+        "items": [
+          {
+            "name": "Seared Fish Fillet",
+            "details": "Lightly seasoned fish with lemon butter."
+          },
+          {
+            "name": "Roast Beef",
+            "details": "Sliced roast beef with gravy."
+          },
+          {
+            "name": "Quinoa Salad",
+            "details": "Nutty quinoa with vegetables and herbs."
+          },
+          {
+            "name": "Cheese Platter",
+            "details": "Assorted cheeses with crackers."
+          }
+        ],
+        "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Coffee & Refreshments Station",
+        "section": "Food",
+        "price": 220,
+        "type": "perPerson",
+        "details": "Coffee, tea, and refreshments throughout the event.",
+        "items": [
+          {
+            "name": "Espresso Bar",
+            "details": "Freshly brewed coffee drinks."
+          },
+          {
+            "name": "Herbal Tea Selection",
+            "details": "A variety of warm teas."
+          },
+          {
+            "name": "Cold Brew",
+            "details": "Iced coffee specialty drinks."
+          }
+        ],
+        "image": "https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Corporate Branding Decor",
+        "section": "Decorations",
+        "price": 25000,
+        "type": "fixed",
+        "details": "LED branding and stage setup.",
+        "image": "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Stage Lighting",
+        "section": "Decorations",
+        "price": 12000,
+        "type": "fixed",
+        "details": "Professional stage lighting for presentations.",
+        "image": "https://images.unsplash.com/photo-1485217988980-11786ced9454?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Podium & Signage",
+        "section": "Decorations",
+        "price": 9000,
+        "type": "fixed",
+        "details": "Custom podium, signage, and speaker branding.",
+        "image": "https://images.unsplash.com/photo-1516900557540-27f3ad0a0b5d?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Corporate Photography",
+        "section": "Services",
+        "price": 18000,
+        "type": "fixed",
+        "details": "Corporate event photography coverage.",
+        "image": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Live Event Host",
+        "section": "Services",
+        "price": 14000,
+        "type": "fixed",
+        "details": "Professional host to guide the event program.",
+        "image": "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "A/V Support",
+        "section": "Services",
+        "price": 17000,
+        "type": "fixed",
+        "details": "Audio-visual team for microphones, screens, and sound.",
+        "image": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Presentation Coordinator",
+        "section": "Services",
+        "price": 11000,
+        "type": "fixed",
+        "details": "Onsite coordinator for presentations and speaker schedules.",
+        "image": "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=1200&q=80"
+      }
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=1200&q=80"
+    ]
+  },
+  {
+    "id": 4,
+    "title": "Engagement Ceremony",
+    "category": "Engagement",
+    "location": "Hyderabad",
+    "description": "Beautiful engagement event with floral stages, couple seating, and food counters.",
+    "excerpt": "Elegant engagement ceremony with luxury decorations and entertainment.",
+    "pricing": [
+      {
+        "name": "Garden Pavilion",
+        "section": "Function Halls",
+        "price": 95000,
+        "type": "fixed",
+        "details": "Open-air garden pavilion with romantic seating for guests.",
+        "image": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Intimate Lounge Hall",
+        "section": "Function Halls",
+        "price": 72000,
+        "type": "fixed",
+        "details": "Cozy indoor lounge for a private engagement celebration.",
+        "image": "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Couple Stage Decoration",
+        "section": "Decorations",
+        "price": 28000,
+        "type": "fixed",
+        "details": "Romantic floral engagement stage.",
+        "image": "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Welcome Floral Wall",
+        "section": "Decorations",
+        "price": 12000,
+        "type": "fixed",
+        "details": "Flower wall entrance with welcome signage.",
+        "image": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Romantic Lighting",
+        "section": "Decorations",
+        "price": 15000,
+        "type": "fixed",
+        "details": "Soft ambient lighting to create a warm atmosphere.",
+        "image": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Dinner Buffet",
+        "section": "Food",
+        "price": 1100,
+        "type": "perPerson",
+        "details": "Premium dinner buffet setup.",
+        "items": [
+          {
+            "name": "Grilled Fish",
+            "details": "Lightly spiced fish with lemon butter."
+          },
+          {
+            "name": "Herb Chicken",
+            "details": "Succulent herb-marinated chicken."
+          },
+          {
+            "name": "Seasonal Vegetables",
+            "details": "Roasted vegetables with herbs."
+          },
+          {
+            "name": "Chocolate Mousse",
+            "details": "Creamy mousse with berry garnish."
+          }
+        ],
+        "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Dessert Bar",
+        "section": "Food",
+        "price": 520,
+        "type": "perPerson",
+        "details": "Curated dessert bar with sweets and pastries.",
+        "items": [
+          {
+            "name": "Mini Tarts",
+            "details": "Fruit tarts with fresh berries."
+          },
+          {
+            "name": "Mango Panna Cotta",
+            "details": "Silky panna cotta with mango coulis."
+          },
+          {
+            "name": "Cupcake Selection",
+            "details": "Assorted engagement-themed cupcakes."
+          }
+        ],
+        "image": "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Cocktail Canapés",
+        "section": "Food",
+        "price": 340,
+        "type": "perPerson",
+        "details": "Elegant bite-sized canapés and beverages.",
+        "items": [
+          {
+            "name": "Smoked Salmon Bites",
+            "details": "Salmon on crisp crostini."
+          },
+          {
+            "name": "Brie Crostini",
+            "details": "Warm brie with caramelized onions."
+          },
+          {
+            "name": "Mini Caprese Skewers",
+            "details": "Tomato, mozzarella, and basil."
+          }
+        ],
+        "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Live Music Band",
+        "section": "Services",
+        "price": 22000,
+        "type": "fixed",
+        "details": "Live romantic music performance.",
+        "image": "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Couple Photographer",
+        "section": "Services",
+        "price": 20000,
+        "type": "fixed",
+        "details": "Photographer focused on the couple and event highlights.",
+        "image": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Audio System & MC",
+        "section": "Services",
+        "price": 13000,
+        "type": "fixed",
+        "details": "Sound system setup and master of ceremonies.",
+        "image": "https://images.unsplash.com/photo-1511379938547-c1f69b13d835?auto=format&fit=crop&w=1200&q=80"
+      }
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=1200&q=80"
+    ]
+  },
+  {
+    "id": 5,
+    "title": "Baby Shower Celebration",
+    "category": "Baby Shower",
+    "location": "Hyderabad",
+    "description": "Cute baby shower event with pastel decorations, games, and delicious food.",
+    "excerpt": "Baby shower party with balloon decorations and themed setup.",
+    "pricing": [
+      {
+        "name": "Baby Shower Room",
+        "section": "Function Halls",
+        "price": 32000,
+        "type": "fixed",
+        "details": "Cozy indoor room decorated for baby shower celebrations.",
+        "image": "https://images.unsplash.com/photo-1522199710521-72d69614c702?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Outdoor Patio Venue",
+        "section": "Function Halls",
+        "price": 39000,
+        "type": "fixed",
+        "details": "Open-air patio setup with pastel decor and seating.",
+        "image": "https://images.unsplash.com/photo-1496200186974-4293800e2c20?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Pastel Balloon Decoration",
+        "section": "Decorations",
+        "price": 15000,
+        "type": "fixed",
+        "details": "Cute pastel baby shower decor.",
+        "image": "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Floral Table Settings",
+        "section": "Decorations",
+        "price": 9000,
+        "type": "fixed",
+        "details": "Delicate floral centerpieces and table design.",
+        "image": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Baby Themed Stage",
+        "section": "Decorations",
+        "price": 18000,
+        "type": "fixed",
+        "details": "Themed stage with baby props and pastel lighting.",
+        "image": "https://images.unsplash.com/photo-1522770179533-24471fcdba45?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Dessert Counter",
+        "section": "Food",
+        "price": 700,
+        "type": "perPerson",
+        "details": "Cupcakes, snacks, and desserts.",
+        "items": [
+          {
+            "name": "Cupcake Selection",
+            "details": "Mini cupcakes with pastel frosting."
+          },
+          {
+            "name": "Macarons",
+            "details": "Colorful French macarons."
+          },
+          {
+            "name": "Mini Donuts",
+            "details": "Assorted glazed mini donuts."
+          }
+        ],
+        "image": "https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Brunch Menu",
+        "section": "Food",
+        "price": 850,
+        "type": "perPerson",
+        "details": "Light brunch menu with sandwiches, salads, and pastries.",
+        "items": [
+          {
+            "name": "Avocado Toast",
+            "details": "Creamy avocado on sourdough."
+          },
+          {
+            "name": "Fruit Parfaits",
+            "details": "Yogurt, granola, and berries."
+          },
+          {
+            "name": "Mini Quiches",
+            "details": "Savory baked quiches with veggies."
+          }
+        ],
+        "image": "https://images.unsplash.com/photo-1481833761820-0509d3217039?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Mocktail Bar",
+        "section": "Food",
+        "price": 320,
+        "type": "perPerson",
+        "details": "Refreshing mocktails and non-alcoholic beverages.",
+        "items": [
+          {
+            "name": "Berry Spritz",
+            "details": "Sparkling berry mocktail."
+          },
+          {
+            "name": "Citrus Cooler",
+            "details": "Fresh citrus with mint."
+          },
+          {
+            "name": "Tropical Punch",
+            "details": "Mango and pineapple blend."
+          }
+        ],
+        "image": "https://images.unsplash.com/photo-1510627498534-cf7e9002facc?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Game Host",
+        "section": "Services",
+        "price": 6000,
+        "type": "fixed",
+        "details": "Host for baby shower games.",
+        "image": "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Baby Shower Photographer",
+        "section": "Services",
+        "price": 9500,
+        "type": "fixed",
+        "details": "Photography coverage for the baby shower event.",
+        "image": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=1200&q=80"
+      },
+      {
+        "name": "Acoustic Music",
+        "section": "Services",
+        "price": 8000,
+        "type": "fixed",
+        "details": "Soft acoustic music performance for the celebration.",
+        "image": "https://images.unsplash.com/photo-1511379938547-c1f69b13d835?auto=format&fit=crop&w=1200&q=80"
+      }
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1514790108377-be9c29b29330?auto=format&fit=crop&w=1200&q=80"
+    ]
+  },
+  {
+    "id": 7,
+    "title": "Luxury Mehendi Ceremony",
+    "category": "Mehendi",
+    "location": "Hyderabad",
+    "description": "Traditional mehendi celebration with floral decor, live music, catering, and photography.",
+    "images": [
+      "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "pricing": [
+      {
+        "name": "Royal Mehendi Hall",
+        "section": "Function Halls",
+        "price": 120000,
+        "details": "Indoor luxury mehendi venue with floral setup."
+      },
+      {
+        "name": "Floral Mehendi Decoration",
+        "section": "Decorations",
+        "price": 55000,
+        "details": "Traditional floral seating and stage decoration."
+      },
+      {
+        "name": "Mehendi Catering",
+        "section": "Food",
+        "price": 650,
+        "details": "Traditional snacks and buffet.",
+        "items": [
+          {
+            "name": "Chaat Counter",
+            "details": "Pani puri and snacks."
+          },
+          {
+            "name": "Veg Biryani",
+            "details": "Special dum biryani."
+          },
+          {
+            "name": "Jalebi",
+            "details": "Hot dessert."
+          }
+        ]
+      },
+      {
+        "name": "Live Dhol Music",
+        "section": "Services",
+        "price": 35000,
+        "details": "Traditional dhol performance for mehendi."
+      },
+      {
+        "name": "Mehendi Photography",
+        "section": "Services",
+        "price": 45000,
+        "details": "Professional candid mehendi photography."
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "title": "Sangeet Night Celebration",
+    "category": "Sangeet",
+    "location": "Mumbai",
+    "description": "Luxury sangeet night with DJ, dance floor, lighting, and live entertainment.",
+    "images": [
+      "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "pricing": [
+      {
+        "name": "Premium Dance Hall",
+        "section": "Function Halls",
+        "price": 220000,
+        "details": "Luxury hall with dance floor and stage."
+      },
+      {
+        "name": "LED Stage Decoration",
+        "section": "Decorations",
+        "price": 90000,
+        "details": "LED stage and lighting setup."
+      },
+      {
+        "name": "Sangeet Dinner Buffet",
+        "section": "Food",
+        "price": 950,
+        "details": "Premium dinner buffet.",
+        "items": [
+          {
+            "name": "Chicken Biryani",
+            "details": "Hyderabadi style biryani."
+          },
+          {
+            "name": "Paneer Curry",
+            "details": "Creamy paneer curry."
+          },
+          {
+            "name": "Ice Cream Counter",
+            "details": "Premium dessert section."
+          }
+        ]
+      },
+      {
+        "name": "DJ Lighting Setup",
+        "section": "Services",
+        "price": 65000,
+        "details": "Professional DJ and smoke effects."
+      },
+      {
+        "name": "Dance Choreography",
+        "section": "Services",
+        "price": 30000,
+        "details": "Professional dance trainers."
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "title": "House Warming Ceremony",
+    "category": "Housewarming",
+    "location": "Chennai",
+    "description": "Traditional housewarming event planning with catering and decoration.",
+    "images": [
+      "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "pricing": [
+      {
+        "name": "Traditional Decoration",
+        "section": "Decorations",
+        "price": 25000,
+        "details": "Flower and entrance decoration."
+      },
+      {
+        "name": "Housewarming Catering",
+        "section": "Food",
+        "price": 450,
+        "details": "Traditional vegetarian meals.",
+        "items": [
+          {
+            "name": "South Indian Meals",
+            "details": "Traditional meals."
+          },
+          {
+            "name": "Sweet Counter",
+            "details": "Traditional sweets."
+          },
+          {
+            "name": "Fruit Juice",
+            "details": "Fresh beverages."
+          }
+        ]
+      },
+      {
+        "name": "Live Bhajan Music",
+        "section": "Services",
+        "price": 20000,
+        "details": "Traditional devotional music."
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "title": "College Fest Event",
+    "category": "College Fest",
+    "location": "Bangalore",
+    "description": "College cultural fest with music, food stalls, games, and stage setup.",
+    "images": [
+      "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "pricing": [
+      {
+        "name": "Open Ground Venue",
+        "section": "Function Halls",
+        "price": 180000,
+        "details": "Large outdoor fest venue."
+      },
+      {
+        "name": "Stage Decoration",
+        "section": "Decorations",
+        "price": 70000,
+        "details": "Large concert stage setup."
+      },
+      {
+        "name": "Fest Food Stalls",
+        "section": "Food",
+        "price": 350,
+        "details": "Food court and snacks.",
+        "items": [
+          {
+            "name": "Burgers",
+            "details": "Veg and non-veg burgers."
+          },
+          {
+            "name": "French Fries",
+            "details": "Crispy fries."
+          },
+          {
+            "name": "Cold Drinks",
+            "details": "Soft beverages."
+          }
+        ]
+      },
+      {
+        "name": "Live Concert",
+        "section": "Services",
+        "price": 150000,
+        "details": "Professional live music concert."
+      },
+      {
+        "name": "Gaming Zone",
+        "section": "Services",
+        "price": 40000,
+        "details": "Interactive gaming arena."
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "title": "Wedding Anniversary Celebration",
+    "category": "Anniversary",
+    "location": "Delhi",
+    "description": "Luxury anniversary celebration with romantic decor and live music.",
+    "images": [
+      "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80"
+    ],
+    "pricing": [
+      {
+        "name": "Luxury Banquet Hall",
+        "section": "Function Halls",
+        "price": 170000,
+        "details": "Premium anniversary banquet venue."
+      },
+      {
+        "name": "Romantic Decoration",
+        "section": "Decorations",
+        "price": 65000,
+        "details": "Rose and candle light decoration."
+      },
+      {
+        "name": "Anniversary Dinner",
+        "section": "Food",
+        "price": 850,
+        "details": "Luxury dinner buffet.",
+        "items": [
+          {
+            "name": "Pasta Counter",
+            "details": "Italian pasta."
+          },
+          {
+            "name": "Grill Chicken",
+            "details": "Premium grilled chicken."
+          },
+          {
+            "name": "Chocolate Cake",
+            "details": "Anniversary cake."
+          }
+        ]
+      },
+      {
+        "name": "Live Romantic Music",
+        "section": "Services",
+        "price": 35000,
+        "details": "Couple live music performance."
+      }
+    ]
+  }
+]

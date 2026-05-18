@@ -238,45 +238,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import API from '../services/api'
 import sampleEvents from '../data/events'
-
-// Image mapping for different item types
-const getItemImage = (itemName, section) => {
-  const name = itemName.toLowerCase()
-
-  // Function Halls
-  if (section === 'Function Halls') {
-    if (name.includes('grand')) return 'https://images.unsplash.com/photo-1519167758481-83f19106ae4f?auto=format&fit=crop&w=500&q=60'
-    if (name.includes('premium')) return 'https://images.unsplash.com/photo-1544101182-87f055ede69f?auto=format&fit=crop&w=500&q=60'
-    if (name.includes('lawn') || name.includes('garden')) return 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=500&q=60'
-    return 'https://images.unsplash.com/photo-1519167758481-83f19106ae4f?auto=format&fit=crop&w=500&q=60'
-  }
-
-  // Food
-  if (section === 'Food') {
-    if (name.includes('vegetarian') || name.includes('veg')) return 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=60'
-    if (name.includes('non-veg') || name.includes('chicken') || name.includes('biryani')) return 'https://images.unsplash.com/photo-1585937421612-29d7efb388f6?auto=format&fit=crop&w=500&q=60'
-    if (name.includes('cake') || name.includes('dessert')) return 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=500&q=60'
-    return 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=500&q=60'
-  }
-
-  // Decorations
-  if (section === 'Decorations') {
-    if (name.includes('floral') || name.includes('flower')) return 'https://images.unsplash.com/photo-1564399579883-451a5d44e67d?auto=format&fit=crop&w=500&q=60'
-    if (name.includes('stage') || name.includes('backdrop')) return 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&w=500&q=60'
-    if (name.includes('lighting') || name.includes('drape')) return 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=500&q=60'
-    return 'https://images.unsplash.com/photo-1564399579883-451a5d44e67d?auto=format&fit=crop&w=500&q=60'
-  }
-
-  // Services
-  if (section === 'Services') {
-    if (name.includes('music') || name.includes('dj') || name.includes('band')) return 'https://images.unsplash.com/photo-1511379938547-c1f69b13d835?auto=format&fit=crop&w=500&q=60'
-    if (name.includes('photography') || name.includes('photo')) return 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?auto=format&fit=crop&w=500&q=60'
-    if (name.includes('dance') || name.includes('performance')) return 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=500&q=60'
-    return 'https://images.unsplash.com/photo-1511379938547-c1f69b13d835?auto=format&fit=crop&w=500&q=60'
-  }
-
-  return 'https://images.unsplash.com/photo-1519167758481-83f19106ae4f?auto=format&fit=crop&w=500&q=60'
-}
+import { getEventCoverImage, getPricingItemImage } from '../utils/images'
 
 export default function EventDetails() {
   const { id } = useParams()
@@ -286,9 +248,6 @@ export default function EventDetails() {
   const [event, setEvent] = useState(
     sampleEvents.find((item) => item.id === eventId) ?? null
   )
-
-  const placeholderImage =
-    'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80'
 
   const normalizeEvent = (data) => {
     if (data.pricing?.length) {
@@ -369,7 +328,6 @@ export default function EventDetails() {
   const sectionNames = Object.keys(sections)
   const [activeSection, setActiveSection] = useState(sectionNames[0])
   const [packageItems, setPackageItems] = useState([])
-  const [guestCount, setGuestCount] = useState(1)
   const [eventDate, setEventDate] = useState('')
   const [dateError, setDateError] = useState('')
   const [confirmLoading, setConfirmLoading] = useState(false)
@@ -420,7 +378,7 @@ export default function EventDetails() {
 
   const itemTotal = (item) =>
     item.type === 'perPerson'
-      ? item.price * guestCount * item.quantity
+      ? item.price * item.quantity
       : item.price * item.quantity
 
   const subtotal = packageItems.reduce(
@@ -459,7 +417,6 @@ export default function EventDetails() {
       const response = await API.post('bookings/package/', {
         event: event.id,
         booking_date: eventDate,
-        guest_count: guestCount,
         package_items: buildPackagePayload(),
         total_amount: totalAmount,
         location: event.location || '',
@@ -488,19 +445,39 @@ export default function EventDetails() {
   <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
     {/* HERO */}
 
-    <div className="overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-[#f4e8dc] via-[#f8f5f0] to-[#efe3d5] px-8 py-12 shadow-lg sm:px-10 lg:px-14">
-      <div className="max-w-4xl">
-        <div className="inline-flex rounded-full border border-[#d6c3af] bg-white/80 px-5 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-[#8b5e34] shadow-sm">
-          {event.category}
+    <div className="overflow-hidden rounded-[2.5rem] bg-white shadow-lg">
+      <div className="grid lg:grid-cols-[1fr_420px]">
+        <div className="px-8 py-12 sm:px-10 lg:px-14">
+          <div className="inline-flex rounded-full border border-[#d6c3af] bg-[#f4e8dc] px-5 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-[#8b5e34]">
+            {event.category}
+          </div>
+
+          <h1 className="mt-6 text-4xl font-bold tracking-tight text-[#1f2937] sm:text-5xl">
+            {event.title}
+          </h1>
+
+          {event.location && (
+            <p className="mt-4 text-sm font-medium text-[#8b5e34]">
+              📍 {event.location}
+            </p>
+          )}
+
+          <p className="mt-6 max-w-3xl text-base leading-8 text-[#5b6470] sm:text-lg">
+            {event.description}
+          </p>
         </div>
 
-        <h1 className="mt-6 text-4xl font-bold tracking-tight text-[#1f2937] sm:text-5xl lg:text-6xl">
-          {event.title}
-        </h1>
-
-        <p className="mt-6 max-w-3xl text-base leading-8 text-[#5b6470] sm:text-lg">
-          {event.description}
-        </p>
+        <div className="relative min-h-[280px] lg:min-h-full">
+          <img
+            src={getEventCoverImage(event)}
+            alt={event.title}
+            className="h-full w-full object-cover"
+            onError={(e) => {
+              e.currentTarget.src = getEventCoverImage({})
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent lg:bg-gradient-to-l lg:from-white/30" />
+        </div>
       </div>
     </div>
 
@@ -541,9 +518,15 @@ export default function EventDetails() {
 
                 <div className="relative h-52 overflow-hidden">
                   <img
-                    src={getItemImage(item.name, activeSection)}
+                    src={getPricingItemImage(item, activeSection)}
                     alt={item.name}
                     className="h-full w-full object-cover transition duration-500 hover:scale-105"
+                    onError={(e) => {
+                      e.currentTarget.src = getPricingItemImage(
+                        {},
+                        activeSection
+                      )
+                    }}
                   />
                 </div>
 
@@ -610,7 +593,7 @@ export default function EventDetails() {
 
                       {item.type === 'perPerson' && (
                         <p className="mt-1 text-xs text-[#5b6470]">
-                          Per Guest
+                          Per person
                         </p>
                       )}
                     </div>
@@ -701,7 +684,7 @@ export default function EventDetails() {
                   <div className="mt-4 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <p className="text-xs font-medium text-[#5b6470]">
-                        Qty
+                        {item.type === 'perPerson' ? 'Guests' : 'Qty'}
                       </p>
 
                       <input
@@ -756,21 +739,6 @@ export default function EventDetails() {
               {dateError && (
                 <p className="mt-2 text-sm font-medium text-red-600">{dateError}</p>
               )}
-            </div>
-
-            <div>
-              <label className="text-xs font-semibold uppercase tracking-wide text-[#1f2937]">
-                Guest Count
-              </label>
-              <input
-                type="number"
-                min="1"
-                value={guestCount}
-                onChange={(e) =>
-                  setGuestCount(Number(e.target.value) || 1)
-                }
-                className="mt-2 w-full rounded-xl border border-[#d9c9b8] bg-[#faf7f2] px-4 py-3 text-sm outline-none"
-              />
             </div>
           </div>
 

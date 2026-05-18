@@ -35,6 +35,7 @@ class Command(BaseCommand):
                     'category': item.get('category', ''),
                     'location': item.get('location', ''),
                     'excerpt': item.get('excerpt', ''),
+                    'images': item.get('images', []),
                     'pricing': item.get('pricing', []),
                 },
             )

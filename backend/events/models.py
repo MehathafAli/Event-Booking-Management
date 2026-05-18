@@ -6,6 +6,7 @@ class Event(models.Model):
     category = models.CharField(max_length=50)
     location = models.CharField(max_length=100, blank=True, default='')
     excerpt = models.TextField(blank=True, default='')
+    images = models.JSONField(default=list, blank=True)
     pricing = models.JSONField(default=list, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
