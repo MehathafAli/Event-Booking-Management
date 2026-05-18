@@ -7,12 +7,21 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const token = localStorage.getItem('access_token')
-    const userData = localStorage.getItem('user')
-    if (token && userData) {
-      setUser(JSON.parse(userData))
+    function loadUser() {
+      const token = localStorage.getItem('access_token')
+      const userData = localStorage.getItem('user')
+      if (token && userData) {
+        setUser(JSON.parse(userData))
+      } else {
+        setUser(null)
+      }
+      setLoading(false)
     }
-    setLoading(false)
+
+    loadUser()
+
+    window.addEventListener('auth-logout', loadUser)
+    return () => window.removeEventListener('auth-logout', loadUser)
   }, [])
 
   const login = (userData, accessToken) => {

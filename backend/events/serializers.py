@@ -11,7 +11,16 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ['id', 'title', 'description', 'category', 'services']
+        fields = [
+            'id',
+            'title',
+            'description',
+            'category',
+            'location',
+            'excerpt',
+            'pricing',
+            'services',
+        ]
 
 class ContactSerializer(serializers.ModelSerializer):
     class Meta:

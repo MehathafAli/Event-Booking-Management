@@ -7,6 +7,7 @@ import Events from './pages/Events'
 import EventDetails from './pages/EventDetails'
 import Contact from './pages/Contact'
 import Navbar from './components/Navbar'
+import BookingSuccess from './pages/BookingSuccess'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/events" element={<Events />} />
             <Route path="/events/:id" element={<EventDetails />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/booking-success/:id" element={<BookingSuccess />} />
           </Routes>
         </main>
       </div>

@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, permissions
 from .models import Event, Service, Contact
 from .serializers import (
     EventSerializer,
@@ -11,11 +11,13 @@ from .serializers import (
 class EventListView(generics.ListAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
+    permission_classes = [permissions.AllowAny]
 
 
 class EventDetailView(generics.RetrieveAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
+    permission_classes = [permissions.AllowAny]
 
 
 # SERVICES

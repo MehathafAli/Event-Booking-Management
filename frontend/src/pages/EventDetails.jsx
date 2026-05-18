@@ -235,10 +235,9 @@
 
 
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import API from '../services/api'
 import sampleEvents from '../data/events'
-import { useNavigate, useParams } from 'react-router-dom'
 
 // Image mapping for different item types
 const getItemImage = (itemName, section) => {
@@ -281,6 +280,7 @@ const getItemImage = (itemName, section) => {
 
 export default function EventDetails() {
   const { id } = useParams()
+  const navigate = useNavigate()
   const eventId = Number(id)
 
   const [event, setEvent] = useState(
@@ -290,17 +290,36 @@ export default function EventDetails() {
   const placeholderImage =
     'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80'
 
+  const normalizeEvent = (data) => {
+    if (data.pricing?.length) {
+      return data
+    }
+
+    if (data.services?.length) {
+      return {
+        ...data,
+        pricing: data.services.map((service) => ({
+          name: service.name,
+          price: service.price,
+          details: service.description,
+          type: 'fixed',
+          section: 'Services',
+        })),
+      }
+    }
+
+    return data
+  }
+
   useEffect(() => {
     async function fetchEvent() {
       try {
         const response = await API.get(`events/${id}/`)
-        console.log(response.data)
-        setEvent(response.data)
+        setEvent(normalizeEvent(response.data))
       } catch (error) {
         console.error(error)
-        setEvent(
-          sampleEvents.find((item) => item.id === eventId) ?? null
-        )
+        const fallback = sampleEvents.find((item) => item.id === eventId)
+        setEvent(fallback ?? null)
       }
     }
 
@@ -352,8 +371,10 @@ export default function EventDetails() {
   const [packageItems, setPackageItems] = useState([])
   const [guestCount, setGuestCount] = useState(1)
   const [eventDate, setEventDate] = useState('')
+  const [dateError, setDateError] = useState('')
+  const [confirmLoading, setConfirmLoading] = useState(false)
+  const [confirmError, setConfirmError] = useState('')
   const [expandedFood, setExpandedFood] = useState({})
-  const [eventDate, setEventDate] = useState('')
 
   const toggleFoodDetails = (name) =>
     setExpandedFood((prev) => ({ ...prev, [name]: !prev[name] }))
@@ -408,6 +429,59 @@ export default function EventDetails() {
   )
   const advance = Math.round(subtotal * 0.5)
   const totalAmount = subtotal
+
+  const buildPackagePayload = () =>
+    packageItems.map((item) => ({
+      name: item.name,
+      price: item.price,
+      quantity: item.quantity,
+      type: item.type || 'fixed',
+      section: item.section || getSection(item),
+      line_total: itemTotal(item),
+    }))
+
+  const handleConfirmPackage = async () => {
+    setDateError('')
+    setConfirmError('')
+
+    if (!eventDate) {
+      setDateError('Please select an event date before confirming your package.')
+      return
+    }
+
+    if (packageItems.length === 0) {
+      return
+    }
+
+    setConfirmLoading(true)
+
+    try {
+      const response = await API.post('bookings/package/', {
+        event: event.id,
+        booking_date: eventDate,
+        guest_count: guestCount,
+        package_items: buildPackagePayload(),
+        total_amount: totalAmount,
+        location: event.location || '',
+      })
+
+      navigate(`/booking-success/${response.data.id}`)
+    } catch (err) {
+      const data = err.response?.data
+      const message =
+        data?.event?.[0] ||
+        data?.booking_date?.[0] ||
+        data?.package_items?.[0] ||
+        data?.detail ||
+        (typeof data === 'object' && data !== null
+          ? Object.values(data).flat()[0]
+          : null) ||
+        'Failed to save package. Please try again.'
+      setConfirmError(message)
+    } finally {
+      setConfirmLoading(false)
+    }
+  }
 
   return (
   <div className="min-h-screen bg-[#f8f5f0] py-16">
@@ -671,15 +745,32 @@ export default function EventDetails() {
               <input
                 type="date"
                 value={eventDate}
-                onChange={(e) =>
+                onChange={(e) => {
                   setEventDate(e.target.value)
-                }
-                className="mt-2 w-full rounded-xl border border-[#d9c9b8] bg-[#faf7f2] px-4 py-3 text-sm outline-none"
+                  if (e.target.value) setDateError('')
+                }}
+                className={`mt-2 w-full rounded-xl border bg-[#faf7f2] px-4 py-3 text-sm outline-none ${
+                  dateError ? 'border-red-400' : 'border-[#d9c9b8]'
+                }`}
               />
+              {dateError && (
+                <p className="mt-2 text-sm font-medium text-red-600">{dateError}</p>
+              )}
             </div>
 
             <div>
-              
+              <label className="text-xs font-semibold uppercase tracking-wide text-[#1f2937]">
+                Guest Count
+              </label>
+              <input
+                type="number"
+                min="1"
+                value={guestCount}
+                onChange={(e) =>
+                  setGuestCount(Number(e.target.value) || 1)
+                }
+                className="mt-2 w-full rounded-xl border border-[#d9c9b8] bg-[#faf7f2] px-4 py-3 text-sm outline-none"
+              />
             </div>
           </div>
 
@@ -711,13 +802,17 @@ export default function EventDetails() {
             </div>
           </div>
 
-          {/* BUTTON */}
+          {confirmError && (
+            <p className="mt-4 text-sm font-medium text-red-600">{confirmError}</p>
+          )}
 
           <button
-            disabled={packageItems.length === 0}
+            type="button"
+            onClick={handleConfirmPackage}
+            disabled={packageItems.length === 0 || confirmLoading}
             className="mt-8 w-full rounded-full bg-[#8b5e34] px-6 py-3 text-base font-semibold text-white transition hover:bg-[#714a28] disabled:cursor-not-allowed disabled:bg-[#d8cabb]"
           >
-            Confirm Package
+            {confirmLoading ? 'Saving Package...' : 'Confirm Package'}
           </button>
         </div>
       </div>
