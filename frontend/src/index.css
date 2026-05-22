@@ -7,12 +7,271 @@ html {
 }
 
 body {
-  @apply bg-slate-50 text-slate-900 antialiased;
+  @apply bg-[#f8f5f0] text-[#1f2937] antialiased;
+}
+
+/* ——— 3D scene & backdrop ——— */
+.perspective-scene {
+  perspective: 1400px;
+  perspective-origin: 50% 20%;
+}
+
+.page-3d-wrap {
+  position: relative;
+  min-height: 100vh;
+  isolation: isolate;
+}
+
+.page-3d-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Floating orbs */
+.orb-3d {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.45;
+  animation: float-orb 14s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.orb-3d-a {
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, #d6bfa9 0%, transparent 70%);
+  top: 8%;
+  left: -8%;
+}
+
+.orb-3d-b {
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, #c9a882 0%, transparent 70%);
+  top: 45%;
+  right: -6%;
+  animation-delay: -5s;
+}
+
+.orb-3d-c {
+  width: 240px;
+  height: 240px;
+  background: radial-gradient(circle, #e8d4bc 0%, transparent 70%);
+  bottom: 10%;
+  left: 30%;
+  animation-delay: -9s;
+}
+
+@keyframes float-orb {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(30px, -40px, 20px) scale(1.08);
+  }
+  66% {
+    transform: translate3d(-20px, 25px, -15px) scale(0.95);
+  }
+}
+
+/* Grid floor */
+.grid-floor-3d {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+      rgba(139, 94, 52, 0.06) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(139, 94, 52, 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to bottom, black 0%, transparent 85%);
+  transform: perspective(500px) rotateX(72deg) scale(2.2);
+  transform-origin: center 80%;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ——— 3D cards ——— */
+.card-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 0.45s ease;
+  will-change: transform;
+}
+
+.card-3d:hover {
+  transform: translateY(-10px) rotateX(4deg) rotateY(-4deg) translateZ(16px);
+  box-shadow: 0 28px 60px -12px rgba(113, 74, 40, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+}
+
+.card-3d-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-3d-shine::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.12) 50%,
+    transparent 60%
+  );
+  transform: translateX(-100%) rotate(25deg);
+  transition: transform 0.7s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.card-3d-shine:hover::before {
+  transform: translateX(100%) rotate(25deg);
+}
+
+/* ——— 3D buttons ——— */
+.btn-3d {
+  @apply relative inline-flex items-center justify-center font-semibold transition-all duration-300;
+  transform-style: preserve-3d;
+  box-shadow: 0 6px 0 #5c3d22, 0 12px 24px rgba(113, 74, 40, 0.25);
+  transform: translateY(0) translateZ(0);
+}
+
+.btn-3d:hover {
+  transform: translateY(-3px) translateZ(8px);
+  box-shadow: 0 9px 0 #5c3d22, 0 18px 32px rgba(113, 74, 40, 0.3);
+}
+
+.btn-3d:active {
+  transform: translateY(4px) translateZ(0);
+  box-shadow: 0 2px 0 #5c3d22, 0 6px 12px rgba(113, 74, 40, 0.2);
+}
+
+.btn-3d-outline {
+  box-shadow: 0 6px 0 #d9c9b8, 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+.btn-3d-outline:hover {
+  box-shadow: 0 9px 0 #d9c9b8, 0 14px 28px rgba(0, 0, 0, 0.1);
+}
+
+/* ——— 3D inputs & fields ——— */
+.input-3d,
+.select-3d,
+.textarea-3d {
+  @apply w-full rounded-2xl border border-[#d9c9b8] bg-[#faf7f2]/90 px-4 py-3.5 text-[#1f2937] backdrop-blur-sm;
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  box-shadow: 0 4px 0 #e7ddd2, 0 8px 20px rgba(113, 74, 40, 0.06);
+}
+
+.input-3d:focus,
+.select-3d:focus,
+.textarea-3d:focus {
+  @apply border-[#8b5e34] bg-white ring-0;
+  outline: none;
+  transform: translateY(-3px) translateZ(12px);
+  box-shadow: 0 8px 0 #d9c9b8, 0 16px 32px rgba(139, 94, 52, 0.15);
+}
+
+/* ——— Sections ——— */
+.section-3d {
+  @apply relative;
+  transform-style: preserve-3d;
+}
+
+.section-title-3d {
+  @apply text-4xl font-bold tracking-tight sm:text-5xl;
+  text-shadow: 0 2px 0 rgba(255, 255, 255, 0.8),
+    0 8px 24px rgba(139, 94, 52, 0.15);
+  transform: translateZ(24px);
+}
+
+.glass-panel-3d {
+  @apply rounded-[2.5rem] border border-white/60 bg-white/75 shadow-xl backdrop-blur-xl;
+  box-shadow: 0 20px 50px -15px rgba(113, 74, 40, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+  transform: translateZ(8px);
+}
+
+/* Hero video */
+.hero-video-wrap {
+  @apply relative overflow-hidden rounded-[3rem];
+  transform-style: preserve-3d;
+  transform: rotateY(-6deg) rotateX(2deg);
+  box-shadow: 0 40px 80px -20px rgba(60, 40, 20, 0.45);
+  transition: transform 0.6s ease;
+}
+
+.hero-video-wrap:hover {
+  transform: rotateY(-2deg) rotateX(1deg) translateZ(20px);
+}
+
+.hero-video-wrap video {
+  @apply h-full w-full object-cover;
+}
+
+.hero-video-overlay {
+  @apply absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent;
+}
+
+/* Stagger reveal */
+.reveal-3d {
+  animation: reveal-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(40px) rotateX(12deg) translateZ(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0) translateZ(0);
+  }
+}
+
+.reveal-delay-1 {
+  animation-delay: 0.1s;
+}
+.reveal-delay-2 {
+  animation-delay: 0.2s;
+}
+.reveal-delay-3 {
+  animation-delay: 0.3s;
+}
+.reveal-delay-4 {
+  animation-delay: 0.4s;
+}
+
+/* Event tile at bottom of home */
+.event-tile-3d {
+  @apply card-3d card-3d-shine block overflow-hidden rounded-[2rem] bg-white;
+}
+
+.event-tile-3d .event-tile-media {
+  @apply relative h-52 overflow-hidden;
+}
+
+.event-tile-3d img,
+.event-tile-3d video {
+  @apply h-full w-full object-cover transition duration-700;
+}
+
+.event-tile-3d:hover img,
+.event-tile-3d:hover video {
+  transform: scale(1.08);
 }
 
 button,
 input,
 select,
 textarea {
-  @apply outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2;
+  @apply outline-none;
 }

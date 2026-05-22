@@ -26,7 +26,7 @@ export default function Events() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-[#f8f5f0] py-20">
+    <div className="perspective-scene min-h-screen py-20">
       {/* HERO */}
 
       <section>
@@ -140,7 +140,7 @@ export default function Events() {
               <Link
                 key={event.id}
                 to={`/events/${event.id}`}
-                className="group overflow-hidden rounded-[2.5rem] bg-white shadow-lg transition duration-300 hover:-translate-y-3"
+                className="card-3d card-3d-shine group overflow-hidden rounded-[2.5rem] bg-white shadow-lg"
               >
                 {/* IMAGE */}
 

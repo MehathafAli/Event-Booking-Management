@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import API from '../services/api'
 
 export default function BookingSuccess() {
   const { id } = useParams()
+  const navigate = useNavigate()
   const [booking, setBooking] = useState(null)
   const [loading, setLoading] = useState(true)
   const [fetchError, setFetchError] = useState('')
@@ -15,17 +16,16 @@ export default function BookingSuccess() {
   })
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
-  const [successMessage, setSuccessMessage] = useState('')
-
   useEffect(() => {
     async function fetchBooking() {
       try {
         const response = await API.get(`bookings/${id}/`)
         setBooking(response.data)
-        if (response.data.is_confirmed) {
-          setSuccessMessage(
-            'Slot booked! Our team will contact you in 30 min.'
-          )
+        if (
+          response.data.is_confirmed &&
+          response.data.payment_status !== 'paid_full'
+        ) {
+          navigate(`/payment/${id}`, { replace: true })
         }
       } catch {
         setFetchError('Unable to load booking details. Please try again.')
@@ -40,7 +40,7 @@ export default function BookingSuccess() {
       setFetchError('Invalid booking reference.')
       setLoading(false)
     }
-  }, [id])
+  }, [id, navigate])
 
   const handleChange = (field) => (e) => {
     setCustomerDetails((prev) => ({ ...prev, [field]: e.target.value }))
@@ -58,13 +58,7 @@ export default function BookingSuccess() {
         customer_email: customerDetails.email,
         customer_address: customerDetails.address,
       })
-      setSuccessMessage(
-        response.data.message ||
-          'Slot booked! Our team will contact you in 30 min.'
-      )
-      if (response.data.booking) {
-        setBooking(response.data.booking)
-      }
+      navigate(`/payment/${id}`)
     } catch (err) {
       const data = err.response?.data
       const firstError =
@@ -104,7 +98,7 @@ export default function BookingSuccess() {
   const items = booking.package_items || []
 
   return (
-    <div className="min-h-screen bg-[#f8f5f0] py-16">
+    <div className="perspective-scene min-h-screen py-16">
       <div className="mx-auto max-w-[900px] px-5 sm:px-8">
         <div className="inline-flex rounded-full border border-[#d6c3af] bg-white/80 px-5 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-[#8b5e34]">
           Booking Summary
@@ -155,24 +149,13 @@ export default function BookingSuccess() {
           </div>
         </div>
 
-        {successMessage ? (
-          <div className="mt-10 rounded-[2rem] border border-green-200 bg-green-50 p-8 text-center shadow-lg">
-            <p className="text-2xl font-bold text-green-800">✓ {successMessage}</p>
-            <Link
-              to="/events"
-              className="mt-6 inline-block rounded-full bg-[#8b5e34] px-8 py-3 text-sm font-semibold text-white"
-            >
-              Browse More Events
-            </Link>
-          </div>
-        ) : (
-          <form
+        <form
             onSubmit={handleSubmit}
-            className="mt-10 rounded-[2.5rem] bg-white p-8 shadow-lg"
+            className="glass-panel-3d mt-10 p-8"
           >
             <h2 className="text-2xl font-bold text-[#1f2937]">Your Details</h2>
             <p className="mt-2 text-sm text-[#5b6470]">
-              Fill in your contact information to confirm your slot.
+              Fill in your details to continue to secure payment.
             </p>
 
             {submitError && (
@@ -191,7 +174,7 @@ export default function BookingSuccess() {
                   value={customerDetails.fullName}
                   onChange={handleChange('fullName')}
                   required
-                  className="mt-2 w-full rounded-xl border border-[#d9c9b8] bg-[#faf7f2] px-4 py-3 text-sm outline-none focus:border-[#8b5e34]"
+                  className="input-3d mt-2 text-sm"
                 />
               </div>
 
@@ -204,7 +187,7 @@ export default function BookingSuccess() {
                   value={customerDetails.phone}
                   onChange={handleChange('phone')}
                   required
-                  className="mt-2 w-full rounded-xl border border-[#d9c9b8] bg-[#faf7f2] px-4 py-3 text-sm outline-none focus:border-[#8b5e34]"
+                  className="input-3d mt-2 text-sm"
                 />
               </div>
 
@@ -217,7 +200,7 @@ export default function BookingSuccess() {
                   value={customerDetails.email}
                   onChange={handleChange('email')}
                   required
-                  className="mt-2 w-full rounded-xl border border-[#d9c9b8] bg-[#faf7f2] px-4 py-3 text-sm outline-none focus:border-[#8b5e34]"
+                  className="input-3d mt-2 text-sm"
                 />
               </div>
 
@@ -229,7 +212,7 @@ export default function BookingSuccess() {
                   value={customerDetails.address}
                   onChange={handleChange('address')}
                   rows={3}
-                  className="mt-2 w-full rounded-xl border border-[#d9c9b8] bg-[#faf7f2] px-4 py-3 text-sm outline-none focus:border-[#8b5e34]"
+                  className="textarea-3d mt-2 text-sm"
                 />
               </div>
             </div>
@@ -237,12 +220,11 @@ export default function BookingSuccess() {
             <button
               type="submit"
               disabled={submitting}
-              className="mt-8 w-full rounded-full bg-[#8b5e34] px-6 py-3 text-base font-semibold text-white transition hover:bg-[#714a28] disabled:cursor-not-allowed disabled:bg-[#d8cabb]"
+              className="btn-3d mt-8 w-full rounded-full bg-[#8b5e34] px-6 py-3 text-base text-white disabled:opacity-60"
             >
-              {submitting ? 'Submitting...' : 'Confirm Booking'}
+              {submitting ? 'Submitting...' : 'Continue to Payment'}
             </button>
           </form>
-        )}
       </div>
     </div>
   )

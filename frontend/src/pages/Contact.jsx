@@ -187,7 +187,7 @@ export default function Contact() {
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="Enter your full name"
-                  className="mt-3 w-full rounded-2xl border border-[#e5d8ca] bg-[#faf7f2] px-5 py-4 text-base text-[#1f2937] outline-none transition focus:border-[#8b5e34] focus:bg-white"
+                  className="input-3d mt-3"
                 />
               </div>
 
@@ -205,7 +205,7 @@ export default function Contact() {
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="Enter your phone number"
-                  className="mt-3 w-full rounded-2xl border border-[#e5d8ca] bg-[#faf7f2] px-5 py-4 text-base text-[#1f2937] outline-none transition focus:border-[#8b5e34] focus:bg-white"
+                  className="input-3d mt-3"
                 />
               </div>
 
@@ -223,7 +223,7 @@ export default function Contact() {
                   value={formData.message}
                   onChange={handleChange}
                   placeholder="Tell us about your event..."
-                  className="mt-3 w-full resize-none rounded-2xl border border-[#e5d8ca] bg-[#faf7f2] px-5 py-4 text-base leading-8 text-[#1f2937] outline-none transition focus:border-[#8b5e34] focus:bg-white"
+                  className="textarea-3d mt-3 resize-none"
                 />
               </div>
 
@@ -231,7 +231,7 @@ export default function Contact() {
 
               <button
                 type="submit"
-                className="w-full rounded-full bg-[#8b5e34] px-8 py-4 text-lg font-semibold text-white shadow-lg transition duration-300 hover:scale-[1.02] hover:bg-[#714a28]"
+                className="btn-3d w-full rounded-full bg-[#8b5e34] px-8 py-4 text-lg text-white"
               >
                 Send Message
               </button>

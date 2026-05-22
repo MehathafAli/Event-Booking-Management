@@ -156,7 +156,7 @@ export default function Register() {
                     }
                     placeholder="Enter username"
                     required
-                    className="mt-3 w-full rounded-2xl border border-[#e5d8ca] bg-[#faf7f2] px-5 py-4 text-base text-[#1f2937] outline-none transition focus:border-[#8b5e34] focus:bg-white"
+                    className="input-3d mt-3"
                   />
                 </div>
 
@@ -175,7 +175,7 @@ export default function Register() {
                     }
                     placeholder="you@example.com"
                     required
-                    className="mt-3 w-full rounded-2xl border border-[#e5d8ca] bg-[#faf7f2] px-5 py-4 text-base text-[#1f2937] outline-none transition focus:border-[#8b5e34] focus:bg-white"
+                    className="input-3d mt-3"
                   />
                 </div>
 
@@ -194,7 +194,7 @@ export default function Register() {
                     }
                     placeholder="Create password"
                     required
-                    className="mt-3 w-full rounded-2xl border border-[#e5d8ca] bg-[#faf7f2] px-5 py-4 text-base text-[#1f2937] outline-none transition focus:border-[#8b5e34] focus:bg-white"
+                    className="input-3d mt-3"
                   />
                 </div>
 
@@ -203,7 +203,7 @@ export default function Register() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full rounded-full bg-[#8b5e34] px-8 py-4 text-base font-semibold text-white shadow-lg transition duration-300 hover:bg-[#714a28] disabled:cursor-not-allowed disabled:bg-[#c8b6a4]"
+                  className="btn-3d w-full rounded-full bg-[#8b5e34] px-8 py-4 text-base text-white disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {loading
                     ? 'Registering...'

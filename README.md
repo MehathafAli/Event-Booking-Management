@@ -30,3 +30,4 @@ A full-stack Event Management and Booking platform built with React, Vite, Djang
 - The backend uses Django REST Framework and JWT authentication.
 - Update `backend/core/settings.py` to configure PostgreSQL/MySQL when ready.
 # Event-Management
+# Event-Booking-Management

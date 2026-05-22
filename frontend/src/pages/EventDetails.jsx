@@ -441,7 +441,7 @@ export default function EventDetails() {
   }
 
   return (
-  <div className="min-h-screen bg-[#f8f5f0] py-16">
+  <div className="perspective-scene min-h-screen py-16">
   <div className="mx-auto max-w-[1500px] px-5 sm:px-8 lg:px-12">
     {/* HERO */}
 
@@ -512,7 +512,7 @@ export default function EventDetails() {
             activeItems.map((item) => (
               <div
                 key={item.name}
-                className="overflow-hidden rounded-[2rem] bg-white shadow-md transition duration-300 hover:-translate-y-1"
+                className="card-3d card-3d-shine overflow-hidden rounded-[2rem] bg-white shadow-md"
               >
                 {/* IMAGE */}
 
@@ -632,7 +632,7 @@ export default function EventDetails() {
       {/* RIGHT PACKAGE */}
 
       <div className="lg:sticky lg:top-8 lg:h-fit">
-        <div className="rounded-[2.5rem] bg-white p-6 shadow-lg">
+        <div className="glass-panel-3d p-6">
           {/* HEADER */}
 
           <div>
@@ -697,7 +697,7 @@ export default function EventDetails() {
                             e.target.value
                           )
                         }
-                        className="w-16 rounded-lg border border-[#d9c9b8] bg-white px-2 py-1 text-center text-sm outline-none"
+                        className="input-3d w-16 px-2 py-1 text-center text-sm"
                       />
                     </div>
 
@@ -732,8 +732,8 @@ export default function EventDetails() {
                   setEventDate(e.target.value)
                   if (e.target.value) setDateError('')
                 }}
-                className={`mt-2 w-full rounded-xl border bg-[#faf7f2] px-4 py-3 text-sm outline-none ${
-                  dateError ? 'border-red-400' : 'border-[#d9c9b8]'
+                className={`input-3d mt-2 text-sm ${
+                  dateError ? '!border-red-400' : ''
                 }`}
               />
               {dateError && (
@@ -778,7 +778,7 @@ export default function EventDetails() {
             type="button"
             onClick={handleConfirmPackage}
             disabled={packageItems.length === 0 || confirmLoading}
-            className="mt-8 w-full rounded-full bg-[#8b5e34] px-6 py-3 text-base font-semibold text-white transition hover:bg-[#714a28] disabled:cursor-not-allowed disabled:bg-[#d8cabb]"
+            className="btn-3d mt-8 w-full rounded-full bg-[#8b5e34] px-6 py-3 text-base text-white disabled:cursor-not-allowed disabled:opacity-60"
           >
             {confirmLoading ? 'Saving Package...' : 'Confirm Package'}
           </button>

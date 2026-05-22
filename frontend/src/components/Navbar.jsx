@@ -1,9 +1,17 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { clearAdminAuth, getAdminUser } from '../services/adminApi'
 
 export default function Navbar() {
   const { user, logout } = useAuth()
+  const [adminUser, setAdminUser] = useState(() => getAdminUser())
+
+  useEffect(() => {
+    const sync = () => setAdminUser(getAdminUser())
+    window.addEventListener('admin-auth-changed', sync)
+    return () => window.removeEventListener('admin-auth-changed', sync)
+  }, [])
 
   const navigate = useNavigate()
 
@@ -12,6 +20,12 @@ export default function Navbar() {
   const handleLogout = () => {
     logout()
     navigate('/')
+    setMobileMenu(false)
+  }
+
+  const handleAdminLogout = () => {
+    clearAdminAuth()
+    navigate('/admin/login')
     setMobileMenu(false)
   }
 
@@ -30,10 +44,18 @@ export default function Navbar() {
       name: 'Contact',
       path: '/contact',
     },
+    ...(user
+      ? [
+          {
+            name: 'Dashboard',
+            path: '/dashboard',
+          },
+        ]
+      : []),
   ]
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[#eadfd2] bg-[#f8f5f0]/90 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-white/50 bg-white/70 shadow-lg backdrop-blur-2xl">
       {/* glow */}
 
       <div className="absolute left-0 top-0 h-full w-full bg-[radial-gradient(circle_at_top_left,rgba(214,191,169,0.12),transparent_30%),radial-gradient(circle_at_top_right,rgba(232,215,195,0.14),transparent_30%)]" />
@@ -102,6 +124,37 @@ export default function Navbar() {
               {link.name}
             </NavLink>
           ))}
+
+          {adminUser ? (
+            <>
+              <NavLink
+                to="/admin/dashboard"
+                className={({ isActive }) =>
+                  `rounded-full px-6 py-3 text-sm font-semibold transition duration-300 ${
+                    isActive
+                      ? 'bg-[#1f2937] text-white shadow-md'
+                      : 'border border-[#1f2937] text-[#1f2937] hover:bg-[#1f2937] hover:text-white'
+                  }`
+                }
+              >
+                Admin panel
+              </NavLink>
+              <button
+                type="button"
+                onClick={handleAdminLogout}
+                className="rounded-full bg-[#1f2937] px-6 py-3 text-sm font-semibold text-white shadow-md transition duration-300 hover:bg-black"
+              >
+                Admin logout
+              </button>
+            </>
+          ) : (
+            <Link
+              to="/admin/login"
+              className="rounded-full border border-[#1f2937] bg-white px-6 py-3 text-sm font-semibold text-[#1f2937] shadow-sm transition duration-300 hover:bg-[#1f2937] hover:text-white"
+            >
+              Admin login
+            </Link>
+          )}
 
           {user ? (
             <>
@@ -176,6 +229,37 @@ export default function Navbar() {
                 {link.name}
               </NavLink>
             ))}
+
+            {adminUser ? (
+              <>
+                <NavLink
+                  to="/admin/dashboard"
+                  onClick={() => setMobileMenu(false)}
+                  className={({ isActive }) =>
+                    `rounded-2xl px-5 py-4 text-center font-semibold ${
+                      isActive ? 'bg-[#1f2937] text-white' : 'bg-white text-[#1f2937]'
+                    }`
+                  }
+                >
+                  Admin panel
+                </NavLink>
+                <button
+                  type="button"
+                  onClick={handleAdminLogout}
+                  className="w-full rounded-2xl bg-[#1f2937] px-5 py-4 font-semibold text-white"
+                >
+                  Admin logout
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/admin/login"
+                onClick={() => setMobileMenu(false)}
+                className="rounded-2xl border-2 border-[#1f2937] bg-white px-5 py-4 text-center font-semibold text-[#1f2937]"
+              >
+                Admin login
+              </Link>
+            )}
 
             {user ? (
               <>
