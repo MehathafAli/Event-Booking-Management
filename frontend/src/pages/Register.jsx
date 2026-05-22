@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import API from '../services/api'
+import { validateEmailField } from '../utils/validation'
 
 export default function Register() {
   const [username, setUsername] = useState('')
@@ -16,12 +17,26 @@ export default function Register() {
     e.preventDefault()
 
     setError('')
+    if (!username.trim()) {
+      setError('Username is required.')
+      return
+    }
+    const emailError = validateEmailField(email)
+    if (emailError) {
+      setError(emailError)
+      return
+    }
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters.')
+      return
+    }
+
     setLoading(true)
 
     try {
       const response = await API.post('register/', {
-        username,
-        email,
+        username: username.trim(),
+        email: email.trim().toLowerCase(),
         password,
       })
 

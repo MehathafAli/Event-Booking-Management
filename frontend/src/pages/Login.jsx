@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate, Link, useLocation } from 'react-router-dom'
 import API from '../services/api'
 import { useAuth } from '../context/AuthContext'
+import { validateEmailField } from '../utils/validation'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -18,11 +19,21 @@ export default function Login() {
     e.preventDefault()
 
     setError('')
+    const emailError = validateEmailField(email)
+    if (emailError) {
+      setError(emailError)
+      return
+    }
+    if (!password.trim()) {
+      setError('Password is required.')
+      return
+    }
+
     setLoading(true)
 
     try {
       const response = await API.post('login/', {
-        email,
+        email: email.trim().toLowerCase(),
         password,
       })
 
@@ -37,7 +48,7 @@ export default function Login() {
           response.data.access
         )
 
-        const redirectTo = location.state?.from || '/dashboard'
+        const redirectTo = location.state?.from || '/events'
         navigate(redirectTo)
       }
     } catch (err) {

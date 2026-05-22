@@ -28,7 +28,14 @@ export function getAdminUser() {
   return raw ? JSON.parse(raw) : null
 }
 
+export function clearUserAuth() {
+  localStorage.removeItem('access_token')
+  localStorage.removeItem('user')
+  window.dispatchEvent(new Event('auth-logout'))
+}
+
 export function setAdminAuth(access, user) {
+  clearUserAuth()
   localStorage.setItem('admin_token', access)
   localStorage.setItem('admin_user', JSON.stringify(user))
   window.dispatchEvent(new Event('admin-auth-changed'))

@@ -6,6 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from events.models import Event, Service
 from events.serializers import EventSerializer
 from bookings.models import Booking
+from bookings.notifications import send_booking_rejection_email
 from bookings.serializers import BookingSerializer, AdminBookingSerializer
 from .permissions import IsAdminAli, ADMIN_USERNAME
 from django.core.mail import send_mail
@@ -210,22 +211,70 @@ class AdminApproveBookingView(APIView):
 
         if action == 'reject':
 
-            booking.status = (
-                'Rejected'
-            )
+            reason = (request.data.get('reason') or '').strip()
+
+            if not reason:
+
+                return Response(
+
+                    {
+                        'detail':
+                        'Please provide a reason for rejection.'
+                    },
+
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            if len(reason) < 10:
+
+                return Response(
+
+                    {
+                        'detail':
+                        'Rejection reason must be at least 10 characters.'
+                    },
+
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            booking.status = 'Rejected'
+
+            booking.admin_notes = reason
 
             booking.save(
                 update_fields=[
-                    'status'
+                    'status',
+                    'admin_notes',
+                    'updated_at',
                 ]
             )
+
+            email_sent = False
+
+            try:
+
+                email_sent = send_booking_rejection_email(
+                    booking,
+                    reason,
+                )
+
+            except Exception:
+
+                email_sent = False
 
             return Response(
 
                 {
 
                     'message':
-                    'Booking rejected.',
+                    'Booking rejected.'
+                    + (
+                        ' Customer notified by email.'
+                        if email_sent
+                        else ' Email could not be sent (no customer email on file).'
+                    ),
+
+                    'email_sent': email_sent,
 
                     'booking':
                     BookingSerializer(

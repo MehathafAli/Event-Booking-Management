@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react'
+import { clearAdminAuth } from '../services/adminApi'
 
 const AuthContext = createContext()
 
@@ -25,6 +26,7 @@ export function AuthProvider({ children }) {
   }, [])
 
   const login = (userData, accessToken) => {
+    clearAdminAuth()
     setUser(userData)
     localStorage.setItem('access_token', accessToken)
     localStorage.setItem('user', JSON.stringify(userData))

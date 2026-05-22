@@ -237,6 +237,11 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import API from '../services/api'
+import {
+  getMinBookingDate,
+  SLOT_BOOKED_MESSAGE,
+  validateBookingDate,
+} from '../utils/bookingDate'
 import sampleEvents from '../data/events'
 import { getEventCoverImage, getPricingItemImage } from '../utils/images'
 
@@ -398,12 +403,15 @@ export default function EventDetails() {
       line_total: itemTotal(item),
     }))
 
+  const minBookingDate = getMinBookingDate()
+
   const handleConfirmPackage = async () => {
     setDateError('')
     setConfirmError('')
 
-    if (!eventDate) {
-      setDateError('Please select an event date before confirming your package.')
+    const dateValidation = validateBookingDate(eventDate)
+    if (dateValidation) {
+      setDateError(dateValidation)
       return
     }
 
@@ -426,15 +434,32 @@ export default function EventDetails() {
       navigate(`/booking-success/${response.data.id}`)
     } catch (err) {
       const data = err.response?.data
-      const message =
-        data?.event?.[0] ||
-        data?.booking_date?.[0] ||
-        data?.package_items?.[0] ||
+      const raw =
         data?.detail ||
+        data?.booking_date?.[0] ||
+        data?.event?.[0] ||
+        data?.package_items?.[0] ||
         (typeof data === 'object' && data !== null
           ? Object.values(data).flat()[0]
-          : null) ||
-        'Failed to save package. Please try again.'
+          : null)
+
+      let message = raw || 'Failed to save package. Please try again.'
+      if (
+        typeof raw === 'string' &&
+        (raw.toLowerCase().includes('already booked') ||
+          raw.toLowerCase().includes('slot'))
+      ) {
+        const bookedPart = raw.includes('Already booked:')
+          ? raw.split('Already booked:')[1]?.trim()
+          : ''
+        message = bookedPart
+          ? `${SLOT_BOOKED_MESSAGE} (${bookedPart})`
+          : SLOT_BOOKED_MESSAGE
+      }
+
+      if (data?.booking_date?.[0]) {
+        setDateError(data.booking_date[0])
+      }
       setConfirmError(message)
     } finally {
       setConfirmLoading(false)
@@ -729,9 +754,11 @@ export default function EventDetails() {
               <input
                 type="date"
                 value={eventDate}
+                min={minBookingDate}
                 onChange={(e) => {
-                  setEventDate(e.target.value)
-                  if (e.target.value) setDateError('')
+                  const value = e.target.value
+                  setEventDate(value)
+                  setDateError(value ? validateBookingDate(value) : '')
                 }}
                 className={`input-3d mt-2 text-sm ${
                   dateError ? '!border-red-400' : ''

@@ -1,6 +1,21 @@
+from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import serializers
 
+from core.validators import validate_email_address, validate_phone_number
+
+from .availability import (
+    SLOT_BOOKED_MESSAGE,
+    find_booked_hall_conflicts,
+    hall_names_from_package,
+    validate_booking_date_not_past,
+)
 from .models import Booking
+
+
+def _validation_error_message(exc):
+    if hasattr(exc, 'messages') and exc.messages:
+        return exc.messages[0]
+    return str(exc)
 
 
 class BookingSerializer(
@@ -214,18 +229,40 @@ class PackageBookingCreateSerializer(
 
     # DATE
 
-    def validate_booking_date(
-        self,
-        value
-    ):
-
+    def validate_booking_date(self, value):
         if not value:
+            raise serializers.ValidationError('Please select an event date.')
 
-            raise serializers.ValidationError(
-                'Please select an event date.'
-            )
+        past_error = validate_booking_date_not_past(value)
+        if past_error:
+            raise serializers.ValidationError(past_error)
 
         return value
+
+    def validate(self, attrs):
+        event = attrs.get('event')
+        booking_date = attrs.get('booking_date')
+        package_items = attrs.get('package_items') or []
+
+        if event and booking_date:
+            selected_halls = hall_names_from_package(package_items)
+            conflicts = find_booked_hall_conflicts(
+                event.id,
+                booking_date,
+                selected_halls,
+            )
+            if conflicts:
+                halls = ', '.join(conflicts)
+                raise serializers.ValidationError(
+                    {
+                        'detail': (
+                            f'{SLOT_BOOKED_MESSAGE} '
+                            f'Already booked: {halls}.'
+                        )
+                    }
+                )
+
+        return attrs
 
     # PACKAGE
 
@@ -301,33 +338,17 @@ class BookingConfirmSerializer(
 
     # PHONE
 
-    def validate_customer_phone(
-        self,
-        value
-    ):
+    def validate_customer_phone(self, value):
+        try:
+            return validate_phone_number(value)
+        except DjangoValidationError as exc:
+            raise serializers.ValidationError(_validation_error_message(exc))
 
-        if not value.strip():
-
-            raise serializers.ValidationError(
-                'Phone number is required.'
-            )
-
-        return value.strip()
-
-    # EMAIL
-
-    def validate_customer_email(
-        self,
-        value
-    ):
-
-        if not value.strip():
-
-            raise serializers.ValidationError(
-                'Email is required.'
-            )
-
-        return value.strip()
+    def validate_customer_email(self, value):
+        try:
+            return validate_email_address(value)
+        except DjangoValidationError as exc:
+            raise serializers.ValidationError(_validation_error_message(exc))
 
 
 # PAYMENT

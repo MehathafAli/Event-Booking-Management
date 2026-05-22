@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import API from '../services/api'
+import {
+  normalizePhone,
+  validateCustomerDetails,
+} from '../utils/validation'
 
 export default function BookingSuccess() {
   const { id } = useParams()
@@ -16,6 +20,7 @@ export default function BookingSuccess() {
   })
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
+  const [fieldErrors, setFieldErrors] = useState({})
   useEffect(() => {
     async function fetchBooking() {
       try {
@@ -43,19 +48,27 @@ export default function BookingSuccess() {
   }, [id, navigate])
 
   const handleChange = (field) => (e) => {
-    setCustomerDetails((prev) => ({ ...prev, [field]: e.target.value }))
+    const value = e.target.value
+    setCustomerDetails((prev) => ({ ...prev, [field]: value }))
+    setFieldErrors((prev) => ({ ...prev, [field]: '' }))
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setSubmitError('')
+    const errors = validateCustomerDetails(customerDetails)
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors)
+      return
+    }
+    setFieldErrors({})
     setSubmitting(true)
 
     try {
-      const response = await API.patch(`bookings/${id}/confirm/`, {
-        customer_name: customerDetails.fullName,
-        customer_phone: customerDetails.phone,
-        customer_email: customerDetails.email,
+      await API.patch(`bookings/${id}/confirm/`, {
+        customer_name: customerDetails.fullName.trim(),
+        customer_phone: normalizePhone(customerDetails.phone),
+        customer_email: customerDetails.email.trim().toLowerCase(),
         customer_address: customerDetails.address,
       })
       navigate(`/payment/${id}`)
@@ -176,6 +189,9 @@ export default function BookingSuccess() {
                   required
                   className="input-3d mt-2 text-sm"
                 />
+                {fieldErrors.fullName && (
+                  <p className="mt-1 text-xs text-red-600">{fieldErrors.fullName}</p>
+                )}
               </div>
 
               <div>
@@ -187,8 +203,15 @@ export default function BookingSuccess() {
                   value={customerDetails.phone}
                   onChange={handleChange('phone')}
                   required
+                  inputMode="numeric"
+                  pattern="[6-9][0-9]{9}"
+                  maxLength={14}
+                  placeholder="9876543210"
                   className="input-3d mt-2 text-sm"
                 />
+                {fieldErrors.phone && (
+                  <p className="mt-1 text-xs text-red-600">{fieldErrors.phone}</p>
+                )}
               </div>
 
               <div>
@@ -200,8 +223,12 @@ export default function BookingSuccess() {
                   value={customerDetails.email}
                   onChange={handleChange('email')}
                   required
+                  placeholder="you@example.com"
                   className="input-3d mt-2 text-sm"
                 />
+                {fieldErrors.email && (
+                  <p className="mt-1 text-xs text-red-600">{fieldErrors.email}</p>
+                )}
               </div>
 
               <div>

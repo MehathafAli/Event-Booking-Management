@@ -35,6 +35,13 @@ export default function AdminDashboard() {
   const [editingEvent, setEditingEvent] = useState(null)
   const [showEventForm, setShowEventForm] = useState(false)
   const [notesDraft, setNotesDraft] = useState({})
+  const [rejectModal, setRejectModal] = useState({
+    open: false,
+    bookingId: null,
+    eventTitle: '',
+    reason: '',
+    error: '',
+  })
   const [eventForm, setEventForm] = useState({
     title: '',
     category: 'Wedding',
@@ -82,6 +89,56 @@ export default function AdminDashboard() {
   const approveBooking = async (id, action = 'approve') => {
     await adminApi.patch(`admin/bookings/${id}/approve/`, { action })
     loadData()
+  }
+
+  const openRejectModal = (booking) => {
+    setRejectModal({
+      open: true,
+      bookingId: booking.id,
+      eventTitle: booking.event_title,
+      reason: '',
+      error: '',
+    })
+  }
+
+  const closeRejectModal = () => {
+    setRejectModal({
+      open: false,
+      bookingId: null,
+      eventTitle: '',
+      reason: '',
+      error: '',
+    })
+  }
+
+  const submitReject = async (e) => {
+    e.preventDefault()
+    const reason = rejectModal.reason.trim()
+    if (reason.length < 10) {
+      setRejectModal((prev) => ({
+        ...prev,
+        error: 'Please enter a reason (at least 10 characters).',
+      }))
+      return
+    }
+    setSaving(true)
+    try {
+      await adminApi.patch(
+        `admin/bookings/${rejectModal.bookingId}/approve/`,
+        { action: 'reject', reason }
+      )
+      closeRejectModal()
+      loadData()
+    } catch (err) {
+      setRejectModal((prev) => ({
+        ...prev,
+        error:
+          err.response?.data?.detail ||
+          'Could not reject booking. Please try again.',
+      }))
+    } finally {
+      setSaving(false)
+    }
   }
 
   const saveAdminNotes = async (bookingId) => {
@@ -412,6 +469,15 @@ export default function AdminDashboard() {
                   </div>
                 )}
 
+                {b.status === 'Rejected' && b.admin_notes && (
+                  <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm">
+                    <p className="text-xs font-bold uppercase text-red-800">
+                      Rejection reason (sent to customer)
+                    </p>
+                    <p className="mt-2 text-red-900">{b.admin_notes}</p>
+                  </div>
+                )}
+
                 <div>
                   <label className="text-xs font-semibold uppercase text-[#8b5e34]">
                     Admin notes
@@ -457,7 +523,7 @@ export default function AdminDashboard() {
                     </button>
                     <button
                       type="button"
-                      onClick={() => approveBooking(b.id, 'reject')}
+                      onClick={() => openRejectModal(b)}
                       className="rounded-full border border-red-300 px-6 py-2 text-sm font-semibold text-red-700 hover:bg-red-50"
                     >
                       Reject
@@ -852,6 +918,67 @@ export default function AdminDashboard() {
               )}
             </div>
           )}
+        </div>
+      )}
+
+      {rejectModal.open && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4">
+          <form
+            onSubmit={submitReject}
+            className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl"
+          >
+            <h3 className="text-xl font-bold text-[#1f2937]">
+              Reject booking
+            </h3>
+            <p className="mt-2 text-sm text-[#5b6470]">
+              {rejectModal.eventTitle} — the customer will receive an email with
+              your reason and a note that refunds are processed within 24 hours.
+            </p>
+
+            {rejectModal.error && (
+              <p className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
+                {rejectModal.error}
+              </p>
+            )}
+
+            <label className="mt-5 block text-xs font-semibold uppercase text-[#1f2937]">
+              Reason for rejection *
+            </label>
+            <textarea
+              required
+              rows={4}
+              value={rejectModal.reason}
+              onChange={(e) =>
+                setRejectModal((prev) => ({
+                  ...prev,
+                  reason: e.target.value,
+                  error: '',
+                }))
+              }
+              placeholder="e.g. Payment proof unclear, hall unavailable on requested date…"
+              className={`${inputClass} mt-2`}
+            />
+            <p className="mt-2 text-xs text-[#5b6470]">
+              Minimum 10 characters. This text is emailed to the customer.
+            </p>
+
+            <div className="mt-6 flex flex-wrap justify-end gap-3">
+              <button
+                type="button"
+                onClick={closeRejectModal}
+                className="rounded-full border border-[#d9c9b8] px-5 py-2 text-sm font-medium text-[#5b6470]"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={saving}
+                className="rounded-full bg-red-600 px-6 py-2 text-sm font-semibold text-white hover:bg-red-700 disabled:opacity-60"
+              >
+                {saving ? 'Sending…' : 'Reject & notify customer'}
+              </button>
+            </div>
+          </form>
         </div>
       )}
     </section>

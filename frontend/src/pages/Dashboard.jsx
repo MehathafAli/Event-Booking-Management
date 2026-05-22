@@ -285,6 +285,25 @@ export default function Dashboard() {
                   </span>
                 </header>
 
+                {booking.status === 'Rejected' && booking.admin_notes && (
+                  <div className="mt-4 rounded-[1.25rem] border border-red-200 bg-red-50 p-4 text-sm">
+                    <p className="font-semibold text-red-800">
+                      Booking rejected
+                    </p>
+                    <p className="mt-2 text-red-900">
+                      <span className="font-medium">Reason: </span>
+                      {booking.admin_notes}
+                    </p>
+                    {booking.amount_paid > 0 && (
+                      <p className="mt-2 text-red-800">
+                        Your payment of ₹
+                        {booking.amount_paid.toLocaleString()} will be refunded
+                        within 24 hours.
+                      </p>
+                    )}
+                  </div>
+                )}
+
                 {/* CARDS */}
 
                 <section className="mt-6 grid gap-4 sm:grid-cols-4">
@@ -375,7 +394,7 @@ export default function Dashboard() {
                   {/* DETAILS */}
 
                   <Link
-                    to={`/booking-success/${booking.id}`}
+                    to={`/my-booking/${booking.id}`}
                     className="rounded-full border border-[#d9c9b8] px-6 py-2.5 text-sm text-[#5b6470]"
                   >
                     View Details

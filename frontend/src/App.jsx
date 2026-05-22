@@ -8,9 +8,12 @@ import EventDetails from './pages/EventDetails'
 import Contact from './pages/Contact'
 import Navbar from './components/Navbar'
 import BookingSuccess from './pages/BookingSuccess'
+import BookingDetails from './pages/BookingDetails'
 import Dashboard from './pages/Dashboard'
 import Payment from './pages/Payment'
 import ProtectedRoute from './components/ProtectedRoute'
+import AdminProtectedRoute from './components/AdminProtectedRoute'
+import GuestRoute from './components/GuestRoute'
 import PageBackdrop from './components/PageBackdrop'
 import SiteFooter from './components/SiteFooter'
 import AdminLogin from './pages/AdminLogin'
@@ -25,8 +28,22 @@ function App() {
         <main className="page-3d-content px-4 py-6 md:px-10">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route
+              path="/login"
+              element={
+                <GuestRoute userOnly>
+                  <Login />
+                </GuestRoute>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <GuestRoute userOnly>
+                  <Register />
+                </GuestRoute>
+              }
+            />
             <Route path="/events" element={<Events />} />
             <Route path="/events/:id" element={<EventDetails />} />
             <Route path="/contact" element={<Contact />} />
@@ -40,8 +57,30 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route
+              path="/my-booking/:id"
+              element={
+                <ProtectedRoute>
+                  <BookingDetails />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/login"
+              element={
+                <GuestRoute adminOnly>
+                  <AdminLogin />
+                </GuestRoute>
+              }
+            />
+            <Route
+              path="/admin/dashboard"
+              element={
+                <AdminProtectedRoute>
+                  <AdminDashboard />
+                </AdminProtectedRoute>
+              }
+            />
           </Routes>
         </main>
         <SiteFooter />

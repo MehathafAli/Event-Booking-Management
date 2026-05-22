@@ -1,7 +1,12 @@
 import { Link } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
+import { getAdminUser } from '../services/adminApi'
 
 export default function SiteFooter() {
   const year = new Date().getFullYear()
+  const { user } = useAuth()
+  const adminUser = getAdminUser()
+  const showAdminLink = !user && !adminUser
 
   return (
     <footer className="relative z-10 mt-16 border-t border-[#eadfd2] bg-white/80 py-10 backdrop-blur-md">
@@ -16,9 +21,11 @@ export default function SiteFooter() {
           <Link to="/contact" className="font-medium text-[#1f2937] hover:text-[#8b5e34]">
             Contact
           </Link>
-          <Link to="/admin/login" className="font-medium text-[#8b5e34] hover:underline">
-            Admin login
-          </Link>
+          {showAdminLink && (
+            <Link to="/admin/login" className="font-medium text-[#8b5e34] hover:underline">
+              Admin login
+            </Link>
+          )}
         </nav>
         <p className="mt-6 text-xs">
           © {year} EventEase. Weddings, catering, halls & event packages.

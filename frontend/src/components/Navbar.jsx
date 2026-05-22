@@ -29,28 +29,15 @@ export default function Navbar() {
     setMobileMenu(false)
   }
 
+  const isAdminSession = Boolean(adminUser)
+  const isUserSession = Boolean(user) && !isAdminSession
+
   const navLinks = [
-    {
-      name: 'Home',
-      path: '/',
-    },
-
-    {
-      name: 'Events',
-      path: '/events',
-    },
-
-    {
-      name: 'Contact',
-      path: '/contact',
-    },
-    ...(user
-      ? [
-          {
-            name: 'Dashboard',
-            path: '/dashboard',
-          },
-        ]
+    { name: 'Home', path: '/' },
+    { name: 'Events', path: '/events' },
+    { name: 'Contact', path: '/contact' },
+    ...(isUserSession
+      ? [{ name: 'Dashboard', path: '/dashboard' }]
       : []),
   ]
 
@@ -67,7 +54,7 @@ export default function Navbar() {
           to="/"
           className="group flex items-center gap-4"
         >
-          {user ? (
+          {isUserSession ? (
             <>
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#8b5e34] text-white shadow-lg transition duration-300 group-hover:scale-105">
                 <span className="text-lg font-bold">
@@ -84,6 +71,20 @@ export default function Navbar() {
 
                 <div className="text-xs uppercase tracking-[0.25em] text-[#8b5e34]">
                   EventEase Member
+                </div>
+              </div>
+            </>
+          ) : isAdminSession ? (
+            <>
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#1f2937] text-white shadow-lg">
+                <span className="text-lg font-bold">A</span>
+              </div>
+              <div>
+                <div className="text-xl font-bold text-[#1f2937]">
+                  Admin — {adminUser.username}
+                </div>
+                <div className="text-xs uppercase tracking-[0.25em] text-[#5b6470]">
+                  EventEase Admin
                 </div>
               </div>
             </>
@@ -125,7 +126,7 @@ export default function Navbar() {
             </NavLink>
           ))}
 
-          {adminUser ? (
+          {isAdminSession ? (
             <>
               <NavLink
                 to="/admin/dashboard"
@@ -148,15 +149,17 @@ export default function Navbar() {
               </button>
             </>
           ) : (
-            <Link
-              to="/admin/login"
-              className="rounded-full border border-[#1f2937] bg-white px-6 py-3 text-sm font-semibold text-[#1f2937] shadow-sm transition duration-300 hover:bg-[#1f2937] hover:text-white"
-            >
-              Admin login
-            </Link>
+            !isUserSession && (
+              <Link
+                to="/admin/login"
+                className="rounded-full border border-[#1f2937] bg-white px-6 py-3 text-sm font-semibold text-[#1f2937] shadow-sm transition duration-300 hover:bg-[#1f2937] hover:text-white"
+              >
+                Admin login
+              </Link>
+            )
           )}
 
-          {user ? (
+          {isUserSession ? (
             <>
               <div className="rounded-full border border-[#eadfd2] bg-white px-5 py-3 text-sm font-medium text-[#5b6470] shadow-sm">
                 Hi, {user.username}
@@ -230,7 +233,7 @@ export default function Navbar() {
               </NavLink>
             ))}
 
-            {adminUser ? (
+            {isAdminSession ? (
               <>
                 <NavLink
                   to="/admin/dashboard"
@@ -252,16 +255,18 @@ export default function Navbar() {
                 </button>
               </>
             ) : (
-              <Link
-                to="/admin/login"
-                onClick={() => setMobileMenu(false)}
-                className="rounded-2xl border-2 border-[#1f2937] bg-white px-5 py-4 text-center font-semibold text-[#1f2937]"
-              >
-                Admin login
-              </Link>
+              !isUserSession && (
+                <Link
+                  to="/admin/login"
+                  onClick={() => setMobileMenu(false)}
+                  className="rounded-2xl border-2 border-[#1f2937] bg-white px-5 py-4 text-center font-semibold text-[#1f2937]"
+                >
+                  Admin login
+                </Link>
+              )
             )}
 
-            {user ? (
+            {isUserSession ? (
               <>
                 <div className="rounded-2xl border border-[#eadfd2] bg-white px-5 py-4 text-center font-medium text-[#5b6470] shadow-sm">
                   Welcome, {user.username}

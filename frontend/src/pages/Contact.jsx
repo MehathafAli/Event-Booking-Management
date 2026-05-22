@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { normalizePhone, validatePhoneField } from '../utils/validation'
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ export default function Contact() {
 
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
+  const [fieldErrors, setFieldErrors] = useState({})
 
   const navigate = useNavigate()
 
@@ -20,12 +22,23 @@ export default function Contact() {
       ...prev,
       [name]: value,
     }))
+    setFieldErrors((prev) => ({ ...prev, [name]: '' }))
   }
 
   const handleSubmit = async (e) => {
   e.preventDefault()
 
   setError('')
+  const errors = {}
+  if (!formData.name.trim()) errors.name = 'Name is required.'
+  const phoneErr = validatePhoneField(formData.phone)
+  if (phoneErr) errors.phone = phoneErr
+  if (!formData.message.trim()) errors.message = 'Message is required.'
+  if (Object.keys(errors).length > 0) {
+    setFieldErrors(errors)
+    return
+  }
+  setFieldErrors({})
 
   try {
     const response = await fetch(
@@ -35,7 +48,11 @@ export default function Contact() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          phone: normalizePhone(formData.phone),
+          message: formData.message.trim(),
+        }),
       }
     )
 
@@ -189,6 +206,9 @@ export default function Contact() {
                   placeholder="Enter your full name"
                   className="input-3d mt-3"
                 />
+                {fieldErrors.name && (
+                  <p className="mt-1 text-xs text-red-600">{fieldErrors.name}</p>
+                )}
               </div>
 
               {/* PHONE */}
@@ -204,9 +224,15 @@ export default function Contact() {
                   required
                   value={formData.phone}
                   onChange={handleChange}
-                  placeholder="Enter your phone number"
+                  inputMode="numeric"
+                  pattern="[6-9][0-9]{9}"
+                  maxLength={14}
+                  placeholder="9876543210"
                   className="input-3d mt-3"
                 />
+                {fieldErrors.phone && (
+                  <p className="mt-1 text-xs text-red-600">{fieldErrors.phone}</p>
+                )}
               </div>
 
               {/* MESSAGE */}
@@ -225,6 +251,9 @@ export default function Contact() {
                   placeholder="Tell us about your event..."
                   className="textarea-3d mt-3 resize-none"
                 />
+                {fieldErrors.message && (
+                  <p className="mt-1 text-xs text-red-600">{fieldErrors.message}</p>
+                )}
               </div>
 
               {/* BUTTON */}
