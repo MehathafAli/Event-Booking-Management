@@ -4,6 +4,7 @@ from .views import (
     AdminEventListCreateView,
     AdminEventDetailView,
     AdminAllBookingsView,
+    AdminBookingDetailView,
     AdminPendingBookingsView,
     AdminApproveBookingView,
 )
@@ -14,5 +15,6 @@ urlpatterns = [
     path('admin/events/<int:pk>/', AdminEventDetailView.as_view(), name='admin-event-detail'),
     path('admin/bookings/', AdminAllBookingsView.as_view(), name='admin-all-bookings'),
     path('admin/bookings/pending/', AdminPendingBookingsView.as_view(), name='admin-pending-bookings'),
+    path('admin/bookings/<int:pk>/', AdminBookingDetailView.as_view(), name='admin-booking-detail'),
     path('admin/bookings/<int:pk>/approve/', AdminApproveBookingView.as_view(), name='admin-approve-booking'),
 ]

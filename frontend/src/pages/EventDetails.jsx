@@ -418,6 +418,7 @@ export default function EventDetails() {
         event: event.id,
         booking_date: eventDate,
         package_items: buildPackagePayload(),
+        subtotal: subtotal,
         total_amount: totalAmount,
         location: event.location || '',
       })

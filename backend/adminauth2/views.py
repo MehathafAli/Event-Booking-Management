@@ -6,7 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from events.models import Event, Service
 from events.serializers import EventSerializer
 from bookings.models import Booking
-from bookings.serializers import BookingSerializer
+from bookings.serializers import BookingSerializer, AdminBookingSerializer
 from .permissions import IsAdminAli, ADMIN_USERNAME
 from django.core.mail import send_mail
 
@@ -97,6 +97,17 @@ class AdminAllBookingsView(generics.ListAPIView):
         if status_filter:
             qs = qs.filter(status=status_filter)
         return qs
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+
+
+class AdminBookingDetailView(generics.RetrieveUpdateAPIView):
+    queryset = Booking.objects.select_related('event')
+    serializer_class = AdminBookingSerializer
+    permission_classes = [IsAdminAli]
 
     def get_serializer_context(self):
         context = super().get_serializer_context()

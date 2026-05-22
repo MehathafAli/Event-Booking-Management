@@ -131,106 +131,49 @@ class BookingSerializer(
             'display_status',
         ]
 
-    # BALANCE
+    def get_balance_due(self, obj):
+        return max(obj.total_amount - obj.amount_paid, 0)
 
-    def get_balance_due(
-        self,
-        obj
-    ):
+    def get_remaining_amount(self, obj):
+        return max(obj.total_amount - obj.amount_paid, 0)
 
-        return max(
-            obj.total_amount -
-            obj.amount_paid,
-            0
-        )
+    def get_payment_photo_url(self, obj):
+        if not obj.payment_photo:
+            return None
+        request = self.context.get('request')
+        if request:
+            return request.build_absolute_uri(obj.payment_photo.url)
+        return obj.payment_photo.url
 
-    # REMAINING
-
-    def get_remaining_amount(
-        self,
-        obj
-    ):
-
-        return max(
-            obj.total_amount -
-            obj.amount_paid,
-            0
-        )
-
-    # PAYMENT IMAGE
-
-    def get_payment_photo_url(
-        self,
-        obj
-    ):
-
-        if obj.payment_photo:
-
-            request = self.context.get(
-                'request'
-            )
-
-            if request:
-
-                return (
-                    request
-                    .build_absolute_uri(
-                        obj.payment_photo.url
-                    )
-                )
-
-            return obj.payment_photo.url
-
-        return None
-
-    # DISPLAY STATUS
-
-    def get_display_status(
-        self,
-        obj
-    ):
-
-        # REVIEW
-        if (
-            obj.payment_status ==
-            'pending_review'
-        ):
-
-            return (
-                'Payment Verification Pending'
-            )
-
-        # FULL PAID
-        if (
-            obj.status == 'Approved'
-            and
-            obj.payment_status ==
-            'paid_full'
-        ):
-
+    def get_display_status(self, obj):
+        if obj.payment_status == 'pending_review':
+            return 'Payment Verification Pending'
+        if obj.status == 'Approved' and obj.payment_status == 'paid_full':
             return 'Paid Full'
-
-        # ADVANCE PAID
-        if (
-            obj.status == 'Approved'
-            and
-            obj.payment_status ==
-            'paid_partial'
-        ):
-
+        if obj.status == 'Approved' and obj.payment_status == 'paid_partial':
             return 'Advance Paid'
-
-        # REJECTED
         if obj.status == 'Rejected':
-
             return 'Rejected'
-
-        # PENDING
         if obj.status == 'Pending':
-
             return 'Pending Approval'
-
         return 'Unpaid'
+
+
+class AdminBookingSerializer(BookingSerializer):
+
+    class Meta(BookingSerializer.Meta):
+
+        read_only_fields = [
+            'created_at',
+            'user',
+            'advance_amount',
+            'balance_due',
+            'display_status',
+            'payment_photo_url',
+            'event_title',
+            'event_category',
+            'remaining_amount',
+        ]
 
 
 # CREATE BOOKING

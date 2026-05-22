@@ -321,15 +321,42 @@ export default function Payment() {
           `bookings/${id}/`
         )
 
-        setBooking(response.data)
+        const data = response.data
+        setBooking(data)
 
-        if (
-          response.data.payment_status ===
-            'pending_review' ||
-          response.data.status ===
-            'Approved'
+        const remaining =
+          data.remaining_amount ??
+          Math.max(
+            0,
+            (data.total_amount || 0) - (data.amount_paid || 0)
+          )
+        const canPayRemaining =
+          data.is_confirmed &&
+          remaining > 0 &&
+          data.payment_status !== 'paid_full'
+
+        if (data.payment_status === 'pending_review') {
+          setSubmitted(true)
+        } else if (
+          data.payment_status === 'paid_full' ||
+          remaining <= 0
         ) {
           setSubmitted(true)
+        } else if (canPayRemaining) {
+          setSubmitted(false)
+          setPaymentType(
+            (data.amount_paid || 0) > 0 ? 'full' : 'advance'
+          )
+        } else if (
+          data.status === 'Pending' &&
+          (data.amount_paid || 0) > 0
+        ) {
+          setSubmitted(true)
+        } else {
+          setSubmitted(false)
+          setPaymentType(
+            (data.amount_paid || 0) > 0 ? 'full' : 'advance'
+          )
         }
       } catch {
         setFetchError(
@@ -451,6 +478,22 @@ const remainingAmount =
           className="mt-6 inline-block font-semibold text-[#8b5e34]"
         >
           Back to Events
+        </Link>
+      </section>
+    )
+  }
+
+  if (!booking.is_confirmed) {
+    return (
+      <section className="mx-auto max-w-xl glass-panel-3d p-10 text-center">
+        <p className="text-[#5b6470]">
+          Please complete your contact details before payment.
+        </p>
+        <Link
+          to={`/booking-success/${id}`}
+          className="btn-3d mt-6 inline-block rounded-full bg-[#8b5e34] px-8 py-3 text-sm text-white"
+        >
+          Complete Details
         </Link>
       </section>
     )
@@ -631,33 +674,44 @@ const remainingAmount =
 
         </p>
 
-        {/* BUTTON */}
+        {/* ACTIONS */}
 
-        {user ? (
+        <div className="mt-10 flex flex-wrap justify-center gap-3">
+          {booking.remaining_amount > 0 &&
+            booking.status === 'Approved' &&
+            booking.payment_status === 'paid_partial' && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSubmitted(false)
+                  setPaymentType('full')
+                  setPaymentPhoto(null)
+                  setPreview('')
+                }}
+                className="btn-3d rounded-full bg-[#8b5e34] px-8 py-4 text-sm text-white"
+              >
+                Pay Remaining ₹
+                {booking.remaining_amount?.toLocaleString()}
+              </button>
+            )}
 
-          <Link
-            to="/dashboard"
-            className="btn-3d mt-10 inline-block rounded-full bg-[#8b5e34] px-8 py-4 text-sm text-white"
-          >
-
-            Go to Dashboard
-
-          </Link>
-
-        ) : (
-
-          <Link
-            to="/login"
-            state={{
-              from: '/dashboard',
-            }}
-            className="btn-3d mt-10 inline-block rounded-full bg-[#8b5e34] px-8 py-4 text-sm text-white"
-          >
-
-            Login to View Dashboard
-
-          </Link>
-        )}
+          {user ? (
+            <Link
+              to="/dashboard"
+              className="btn-3d inline-block rounded-full border border-[#d9c9b8] bg-white px-8 py-4 text-sm font-semibold text-[#8b5e34]"
+            >
+              Go to Dashboard
+            </Link>
+          ) : (
+            <Link
+              to="/login"
+              state={{ from: '/dashboard' }}
+              className="btn-3d inline-block rounded-full border border-[#d9c9b8] bg-white px-8 py-4 text-sm font-semibold text-[#8b5e34]"
+            >
+              Login to View Dashboard
+            </Link>
+          )}
+        </div>
 
       </article>
 
@@ -672,11 +726,16 @@ const remainingAmount =
         </p>
 
         <h1 className="mt-6 text-5xl font-bold text-[#1f2937]">
-          Payment Gateway
+          {alreadyPaid ? 'Pay Remaining Balance' : 'Payment Gateway'}
         </h1>
 
         <p className="mt-3 text-lg text-[#5b6470]">
           {booking.event_title}
+          {alreadyPaid && (
+            <span className="mt-1 block text-base text-[#8b5e34]">
+              Remaining due: ₹{remainingAmount.toLocaleString()}
+            </span>
+          )}
         </p>
 
         <form
@@ -928,7 +987,9 @@ const remainingAmount =
             >
               {paying
                 ? 'Uploading...'
-                : 'Submit Payment & Book'}
+                : alreadyPaid
+                  ? `Pay Remaining ₹${payableAmount.toLocaleString()}`
+                  : 'Submit Payment & Book'}
             </button>
           </aside>
         </form>
