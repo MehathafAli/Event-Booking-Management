@@ -16,6 +16,7 @@ const emptyItem = (section = 'Food') => ({
 
 const formatMoney = (n) =>
   `₹${Number(n || 0).toLocaleString('en-IN')}`
+const MONTH_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 const inputClass =
   'mt-1 w-full rounded-xl border border-[#d9c9b8] bg-[#faf7f2] px-3 py-2 text-sm text-[#1f2937] outline-none focus:border-[#8b5e34] focus:bg-white'
@@ -30,6 +31,8 @@ export default function AdminDashboard() {
   const [bookingFilter, setBookingFilter] = useState('all')
   const [bookings, setBookings] = useState([])
   const [events, setEvents] = useState([])
+  const [report, setReport] = useState(null)
+  const [reportYear, setReportYear] = useState(new Date().getFullYear())
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [editingEvent, setEditingEvent] = useState(null)
@@ -54,11 +57,11 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     if (!adminToken) {
-      navigate('/admin/login')
+      navigate('/login')
       return
     }
     loadData()
-  }, [navigate, adminToken, bookingFilter])
+  }, [navigate, adminToken, bookingFilter, reportYear])
 
   async function loadData() {
     setLoading(true)
@@ -67,15 +70,17 @@ export default function AdminDashboard() {
         bookingFilter === 'pending'
           ? 'admin/bookings/pending/'
           : 'admin/bookings/'
-      const [bRes, eRes] = await Promise.all([
+      const [bRes, eRes, rRes] = await Promise.all([
         adminApi.get(bookingUrl),
         adminApi.get('admin/events/'),
+        adminApi.get(`admin/reports/profit/?year=${reportYear}`),
       ])
       setBookings(bRes.data)
       setEvents(eRes.data)
+      setReport(rRes.data)
     } catch {
       clearAdminAuth()
-      navigate('/admin/login')
+      navigate('/login')
     } finally {
       setLoading(false)
     }
@@ -83,7 +88,7 @@ export default function AdminDashboard() {
 
   const handleLogout = () => {
     clearAdminAuth()
-    navigate('/admin/login')
+    navigate('/login')
   }
 
   const approveBooking = async (id, action = 'approve') => {
@@ -258,7 +263,73 @@ export default function AdminDashboard() {
 
   return (
     <section className="mx-auto mt-8 max-w-[1400px] space-y-6 px-5 pb-16">
-    
+      {report && (
+        <section className="space-y-4 rounded-2xl border border-[#d9c9b8] bg-white p-6 shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#8b5e34]">Admin analytics</p>
+              <h2 className="mt-1 text-xl font-bold text-[#1f2937]">Profit Report Dashboard</h2>
+            </div>
+            <label className="text-sm font-semibold text-[#5b6470]">
+              Year:{' '}
+              <select
+                value={reportYear}
+                onChange={(e) => setReportYear(Number(e.target.value))}
+                className="ml-2 rounded-lg border border-[#d9c9b8] bg-[#faf7f2] px-3 py-1.5 text-sm"
+              >
+                {Array.from({ length: 6 }).map((_, i) => {
+                  const y = new Date().getFullYear() - i
+                  return <option key={y} value={y}>{y}</option>
+                })}
+              </select>
+            </label>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <article className="rounded-xl bg-[#f8f5f0] p-4">
+              <p className="text-xs text-[#5b6470]">Overall profit</p>
+              <p className="mt-1 text-xl font-bold text-[#1f2937]">{formatMoney(report.overall_profit)}</p>
+            </article>
+            <article className="rounded-xl bg-[#f8f5f0] p-4">
+              <p className="text-xs text-[#5b6470]">All bookings</p>
+              <p className="mt-1 text-xl font-bold text-[#1f2937]">{report.totals?.bookings || 0}</p>
+            </article>
+            <article className="rounded-xl bg-[#f8f5f0] p-4">
+              <p className="text-xs text-[#5b6470]">Events</p>
+              <p className="mt-1 text-xl font-bold text-[#1f2937]">{report.totals?.events || 0}</p>
+            </article>
+            <article className="rounded-xl bg-[#f8f5f0] p-4">
+              <p className="text-xs text-[#5b6470]">Packages selected</p>
+              <p className="mt-1 text-xl font-bold text-[#1f2937]">{report.totals?.packages || 0}</p>
+            </article>
+          </div>
+
+          <div className="grid gap-4 lg:grid-cols-2">
+            <div className="rounded-xl border border-[#e8dfd4] p-4">
+              <h3 className="text-sm font-bold uppercase tracking-wide text-[#8b5e34]">Monthly profit ({report.selected_year})</h3>
+              <div className="mt-3 space-y-2">
+                {report.monthly_profit?.map((m) => (
+                  <div key={m.month} className="flex items-center justify-between text-sm">
+                    <span className="text-[#5b6470]">{MONTH_LABELS[m.month - 1]}</span>
+                    <span className="font-semibold text-[#1f2937]">{formatMoney(m.profit)}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="rounded-xl border border-[#e8dfd4] p-4">
+              <h3 className="text-sm font-bold uppercase tracking-wide text-[#8b5e34]">Yearly profit</h3>
+              <div className="mt-3 space-y-2">
+                {report.yearly_profit?.length ? report.yearly_profit.map((y) => (
+                  <div key={y.year} className="flex items-center justify-between text-sm">
+                    <span className="text-[#5b6470]">{y.year}</span>
+                    <span className="font-semibold text-[#1f2937]">{formatMoney(y.profit)}</span>
+                  </div>
+                )) : <p className="text-sm text-[#5b6470]">No approved bookings yet.</p>}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Tabs */}
       <nav className="flex flex-wrap gap-2">

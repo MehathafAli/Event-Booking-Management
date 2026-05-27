@@ -1,4 +1,7 @@
 from django.contrib.auth.models import User
+from django.db.models import Sum
+from django.db.models.functions import ExtractMonth, ExtractYear
+from django.utils import timezone
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -131,6 +134,69 @@ class AdminPendingBookingsView(generics.ListAPIView):
         context = super().get_serializer_context()
         context['request'] = self.request
         return context
+
+
+class AdminProfitReportView(APIView):
+    permission_classes = [IsAdminAli]
+
+    def get(self, request):
+        now = timezone.now()
+        year = int(request.query_params.get('year') or now.year)
+
+        approved = Booking.objects.filter(status='Approved')
+
+        overall_profit = approved.aggregate(
+            total=Sum('amount_paid')
+        )['total'] or 0
+
+        yearly_profit = (
+            approved
+            .annotate(year_value=ExtractYear('booking_date'))
+            .values('year_value')
+            .annotate(total=Sum('amount_paid'))
+            .order_by('-year_value')
+        )
+
+        monthly_profit = (
+            approved
+            .filter(booking_date__year=year)
+            .annotate(month_value=ExtractMonth('booking_date'))
+            .values('month_value')
+            .annotate(total=Sum('amount_paid'))
+            .order_by('month_value')
+        )
+
+        monthly_map = {row['month_value']: row['total'] or 0 for row in monthly_profit}
+        monthly_series = [
+            {
+                'month': month,
+                'profit': monthly_map.get(month, 0),
+            }
+            for month in range(1, 13)
+        ]
+
+        package_count = sum(
+            len(booking.package_items or [])
+            for booking in Booking.objects.all().only('package_items')
+        )
+
+        return Response(
+            {
+                'selected_year': year,
+                'overall_profit': overall_profit,
+                'yearly_profit': [
+                    {'year': row['year_value'], 'profit': row['total'] or 0}
+                    for row in yearly_profit
+                    if row['year_value'] is not None
+                ],
+                'monthly_profit': monthly_series,
+                'totals': {
+                    'bookings': Booking.objects.count(),
+                    'events': Event.objects.count(),
+                    'packages': package_count,
+                },
+            }
+        )
 
 
 '''class AdminApproveBookingView(APIView):

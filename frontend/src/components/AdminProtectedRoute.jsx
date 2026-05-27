@@ -11,7 +11,7 @@ export default function AdminProtectedRoute({ children }) {
 
   if (!adminToken || !adminUser) {
     return (
-      <Navigate to="/admin/login" state={{ from: location.pathname }} replace />
+      <Navigate to="/login" state={{ from: location.pathname }} replace />
     )
   }
 

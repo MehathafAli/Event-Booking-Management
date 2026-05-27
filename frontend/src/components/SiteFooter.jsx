@@ -22,8 +22,8 @@ export default function SiteFooter() {
             Contact
           </Link>
           {showAdminLink && (
-            <Link to="/admin/login" className="font-medium text-[#8b5e34] hover:underline">
-              Admin login
+            <Link to="/login" className="font-medium text-[#8b5e34] hover:underline">
+              Login
             </Link>
           )}
         </nav>

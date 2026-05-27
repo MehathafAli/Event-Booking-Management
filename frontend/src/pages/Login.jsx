@@ -2,10 +2,11 @@ import { useState } from 'react'
 import { useNavigate, Link, useLocation } from 'react-router-dom'
 import API from '../services/api'
 import { useAuth } from '../context/AuthContext'
+import { adminLogin, setAdminAuth } from '../services/adminApi'
 import { validateEmailField } from '../utils/validation'
 
 export default function Login() {
-  const [email, setEmail] = useState('')
+  const [identifier, setIdentifier] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
@@ -20,10 +21,18 @@ export default function Login() {
     e.preventDefault()
 
     setError('')
-    const emailError = validateEmailField(email)
-    if (emailError) {
-      setError(emailError)
+    const normalizedIdentifier = identifier.trim()
+    const isAdminLogin = normalizedIdentifier.toLowerCase() === 'ali'
+    if (!normalizedIdentifier) {
+      setError('Email or admin username is required.')
       return
+    }
+    if (!isAdminLogin) {
+      const emailError = validateEmailField(normalizedIdentifier)
+      if (emailError) {
+        setError(emailError)
+        return
+      }
     }
     if (!password.trim()) {
       setError('Password is required.')
@@ -33,18 +42,25 @@ export default function Login() {
     setLoading(true)
 
     try {
+      if (isAdminLogin) {
+        const adminResponse = await adminLogin(normalizedIdentifier, password)
+        setAdminAuth(adminResponse.data.access, adminResponse.data.user)
+        navigate('/admin/dashboard')
+        return
+      }
+
       const response = await API.post('login/', {
-        email: email.trim().toLowerCase(),
+        email: normalizedIdentifier.toLowerCase(),
         password,
       })
 
       if (response.data.access) {
         login(
           {
-            email,
+            email: normalizedIdentifier.toLowerCase(),
             username:
               response.data.user?.username ||
-              email.split('@')[0],
+              normalizedIdentifier.split('@')[0],
           },
           response.data.access
         )
@@ -175,19 +191,22 @@ export default function Login() {
 
                 <div>
                   <label className="text-sm font-semibold uppercase tracking-wide text-[#1f2937]">
-                    Email Address
+                    Email / Admin Username
                   </label>
 
                   <input
-                    type="email"
-                    value={email}
+                    type="text"
+                    value={identifier}
                     onChange={(e) =>
-                      setEmail(e.target.value)
+                      setIdentifier(e.target.value)
                     }
-                    placeholder="you@example.com"
+                    placeholder="you@example.com or Ali"
                     required
                     className="input-3d mt-3"
                   />
+                  <p className="mt-2 text-xs text-[#5b6470]">
+                    Use your email for user login, or enter <span className="font-semibold">Ali</span> for admin login.
+                  </p>
                 </div>
 
                 {/* password */}

@@ -33,7 +33,7 @@ export default function Navbar() {
 
   const handleAdminLogout = () => {
     clearAdminAuth()
-    navigate('/admin/login')
+    navigate('/login')
     setMobileMenu(false)
   }
 
@@ -176,14 +176,7 @@ export default function Navbar() {
                 Admin logout
               </button>
             </>
-          ) : (
-            <Link
-              to="/admin/login"
-              className="rounded-full border border-[#1f2937] bg-white px-6 py-3 text-sm font-semibold text-[#1f2937] shadow-sm transition duration-300 hover:bg-[#1f2937] hover:text-white"
-            >
-              Admin login
-            </Link>
-          )}
+          ) : null}
 
           {/* USER SECTION */}
 
@@ -293,17 +286,7 @@ export default function Navbar() {
                   Admin logout
                 </button>
               </>
-            ) : (
-              <Link
-                to="/admin/login"
-                onClick={() =>
-                  setMobileMenu(false)
-                }
-                className="rounded-2xl border-2 border-[#1f2937] bg-white px-5 py-4 text-center font-semibold text-[#1f2937]"
-              >
-                Admin login
-              </Link>
-            )}
+            ) : null}
 
             {/* USER MOBILE */}
 

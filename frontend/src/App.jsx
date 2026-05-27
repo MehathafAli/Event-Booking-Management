@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Navigate, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import Home from './pages/Home'
 import Login from './pages/Login'
@@ -16,7 +16,6 @@ import AdminProtectedRoute from './components/AdminProtectedRoute'
 import GuestRoute from './components/GuestRoute'
 import PageBackdrop from './components/PageBackdrop'
 import SiteFooter from './components/SiteFooter'
-import AdminLogin from './pages/AdminLogin'
 import AdminDashboard from './pages/AdminDashboard'
 
 function App() {
@@ -67,11 +66,7 @@ function App() {
             />
             <Route
               path="/admin/login"
-              element={
-                <GuestRoute adminOnly>
-                  <AdminLogin />
-                </GuestRoute>
-              }
+              element={<Navigate to="/login" replace />}
             />
             <Route
               path="/admin/dashboard"
