@@ -264,97 +264,789 @@ export default function AdminDashboard() {
   return (
     <section className="mx-auto mt-8 max-w-[1400px] space-y-6 px-5 pb-16">
       {report && (
-        <section className="space-y-4 rounded-2xl border border-[#d9c9b8] bg-white p-6 shadow-sm">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#8b5e34]">Admin analytics</p>
-              <h2 className="mt-1 text-xl font-bold text-[#1f2937]">Profit Report Dashboard</h2>
-            </div>
-            <label className="text-sm font-semibold text-[#5b6470]">
-              Year:{' '}
-              <select
-                value={reportYear}
-                onChange={(e) => setReportYear(Number(e.target.value))}
-                className="ml-2 rounded-lg border border-[#d9c9b8] bg-[#faf7f2] px-3 py-1.5 text-sm"
-              >
-                {Array.from({ length: 6 }).map((_, i) => {
-                  const y = new Date().getFullYear() - i
-                  return <option key={y} value={y}>{y}</option>
-                })}
-              </select>
-            </label>
-          </div>
+      <div></div>
+)}
 
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <article className="rounded-xl bg-[#f8f5f0] p-4">
-              <p className="text-xs text-[#5b6470]">Overall profit</p>
-              <p className="mt-1 text-xl font-bold text-[#1f2937]">{formatMoney(report.overall_profit)}</p>
-            </article>
-            <article className="rounded-xl bg-[#f8f5f0] p-4">
-              <p className="text-xs text-[#5b6470]">All bookings</p>
-              <p className="mt-1 text-xl font-bold text-[#1f2937]">{report.totals?.bookings || 0}</p>
-            </article>
-            <article className="rounded-xl bg-[#f8f5f0] p-4">
-              <p className="text-xs text-[#5b6470]">Events</p>
-              <p className="mt-1 text-xl font-bold text-[#1f2937]">{report.totals?.events || 0}</p>
-            </article>
-            <article className="rounded-xl bg-[#f8f5f0] p-4">
-              <p className="text-xs text-[#5b6470]">Packages selected</p>
-              <p className="mt-1 text-xl font-bold text-[#1f2937]">{report.totals?.packages || 0}</p>
-            </article>
-          </div>
+  {/* Tabs */}
 
-          <div className="grid gap-4 lg:grid-cols-2">
-            <div className="rounded-xl border border-[#e8dfd4] p-4">
-              <h3 className="text-sm font-bold uppercase tracking-wide text-[#8b5e34]">Monthly profit ({report.selected_year})</h3>
-              <div className="mt-3 space-y-2">
-                {report.monthly_profit?.map((m) => (
-                  <div key={m.month} className="flex items-center justify-between text-sm">
-                    <span className="text-[#5b6470]">{MONTH_LABELS[m.month - 1]}</span>
-                    <span className="font-semibold text-[#1f2937]">{formatMoney(m.profit)}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="rounded-xl border border-[#e8dfd4] p-4">
-              <h3 className="text-sm font-bold uppercase tracking-wide text-[#8b5e34]">Yearly profit</h3>
-              <div className="mt-3 space-y-2">
-                {report.yearly_profit?.length ? report.yearly_profit.map((y) => (
-                  <div key={y.year} className="flex items-center justify-between text-sm">
-                    <span className="text-[#5b6470]">{y.year}</span>
-                    <span className="font-semibold text-[#1f2937]">{formatMoney(y.profit)}</span>
-                  </div>
-                )) : <p className="text-sm text-[#5b6470]">No approved bookings yet.</p>}
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
+<nav className="flex flex-wrap gap-3">
+  {[
+    {
+      id: 'dashboard',
+      label: 'Dashboard',
+    },
 
-      {/* Tabs */}
-      <nav className="flex flex-wrap gap-2">
-        {[
-          { id: 'bookings', label: 'All Bookings' },
-          { id: 'events', label: 'Events & Packages' },
-        ].map(({ id, label }) => (
-          <button
-            key={id}
-            type="button"
-            onClick={() => setTab(id)}
-            className={`rounded-full px-6 py-2.5 text-sm font-semibold transition ${
-              tab === id
-                ? 'bg-[#8b5e34] text-white shadow'
-                : 'border border-[#d9c9b8] bg-white text-[#1f2937] hover:bg-[#faf7f2]'
-            }`}
+    {
+      id: 'bookings',
+      label: 'All Bookings',
+    },
+
+    {
+      id: 'events',
+      label: 'Events & Packages',
+    },
+
+    {
+      id: 'profit',
+      label: 'Profit Report',
+    },
+  ].map(({ id, label }) => (
+    <button
+      key={id}
+      type="button"
+      onClick={() => setTab(id)}
+      className={`rounded-2xl px-6 py-3 text-sm font-semibold transition-all duration-300 ${
+        tab === id
+          ? 'bg-[#8b5e34] text-white shadow-lg scale-[1.02]'
+          : 'border border-[#d9c9b8] bg-white text-[#1f2937] hover:bg-[#faf7f2]'
+      }`}
+    >
+      {label}
+    </button>
+  ))}
+</nav>
+
+{/* MAIN CONTENT */}
+
+{loading ? (
+  <div className="flex min-h-[300px] items-center justify-center">
+    <div className="space-y-3 text-center">
+      <div className="mx-auto h-14 w-14 animate-spin rounded-full border-4 border-[#8b5e34] border-t-transparent" />
+
+      <p className="font-medium text-[#5b6470]">
+        Loading dashboard...
+      </p>
+    </div>
+  </div>
+) : tab === 'dashboard' ? (
+
+<div className="space-y-8">
+
+  {/* HERO */}
+
+  <section className="overflow-hidden rounded-[2rem] bg-gradient-to-r from-[#8b5e34] via-[#9d6b3f] to-[#714a28] p-8 text-white shadow-2xl">
+
+    <div className="flex flex-wrap items-center justify-between gap-6">
+
+      <div>
+
+        <p className="text-sm uppercase tracking-[0.35em] text-white/80">
+          EventEase Admin
+        </p>
+
+        <h1 className="mt-3 text-4xl font-black leading-tight">
+          Welcome Back,
+          <br />
+          {admin?.username || 'Admin'}
+        </h1>
+
+        <p className="mt-4 max-w-2xl text-sm text-white/80">
+          Monitor bookings, profits, events, approvals and customer activity in real time.
+        </p>
+
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+
+        <div className="rounded-3xl bg-white/10 p-5 backdrop-blur">
+
+          <p className="text-xs uppercase tracking-widest text-white/70">
+            Today Bookings
+          </p>
+
+          <h2 className="mt-3 text-4xl font-bold">
+            {bookings.length}
+          </h2>
+
+        </div>
+
+        <div className="rounded-3xl bg-white/10 p-5 backdrop-blur">
+
+          <p className="text-xs uppercase tracking-widest text-white/70">
+            Total Revenue
+          </p>
+
+          <h2 className="mt-3 text-4xl font-bold">
+            {formatMoney(report?.overall_profit || 0)}
+          </h2>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  {/* STATS */}
+
+  <section className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+
+    <article className="group rounded-[2rem] border border-[#e8dfd4] bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+
+      <div className="flex items-center justify-between">
+
+        <div>
+
+          <p className="text-xs uppercase tracking-widest text-[#8b5e34]">
+            Total Bookings
+          </p>
+
+          <h2 className="mt-3 text-4xl font-black text-[#1f2937]">
+            {bookings.length}
+          </h2>
+
+        </div>
+
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#f8f1e8] text-3xl">
+          📅
+        </div>
+
+      </div>
+
+    </article>
+
+    <article className="group rounded-[2rem] border border-[#e8dfd4] bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+
+      <div className="flex items-center justify-between">
+
+        <div>
+
+          <p className="text-xs uppercase tracking-widest text-green-700">
+            Revenue
+          </p>
+
+          <h2 className="mt-3 text-4xl font-black text-[#1f2937]">
+            {formatMoney(report?.overall_profit || 0)}
+          </h2>
+
+        </div>
+
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-green-100 text-3xl">
+          💰
+        </div>
+
+      </div>
+
+    </article>
+
+    <article className="group rounded-[2rem] border border-[#e8dfd4] bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+
+      <div className="flex items-center justify-between">
+
+        <div>
+
+          <p className="text-xs uppercase tracking-widest text-blue-700">
+            Events
+          </p>
+
+          <h2 className="mt-3 text-4xl font-black text-[#1f2937]">
+            {events.length}
+          </h2>
+
+        </div>
+
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-100 text-3xl">
+          🎉
+        </div>
+
+      </div>
+
+    </article>
+
+    <article className="group rounded-[2rem] border border-[#e8dfd4] bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+
+      <div className="flex items-center justify-between">
+
+        <div>
+
+          <p className="text-xs uppercase tracking-widest text-orange-700">
+            Pending
+          </p>
+
+          <h2 className="mt-3 text-4xl font-black text-[#1f2937]">
+
+            {
+              bookings.filter(
+                (b) => b.status === 'Pending'
+              ).length
+            }
+
+          </h2>
+
+        </div>
+
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-orange-100 text-3xl">
+          ⏳
+        </div>
+
+      </div>
+
+    </article>
+
+  </section>
+
+  {/* MAIN GRID */}
+
+  <section className="grid gap-6 xl:grid-cols-3">
+
+    {/* RECENT BOOKINGS */}
+
+    <div className="xl:col-span-2 rounded-[2rem] border border-[#e8dfd4] bg-white p-6 shadow-sm">
+
+      <div className="flex items-center justify-between">
+
+        <div>
+
+          <p className="text-xs uppercase tracking-[0.3em] text-[#8b5e34]">
+            Recent Activity
+          </p>
+
+          <h2 className="mt-2 text-2xl font-black text-[#1f2937]">
+            Latest Bookings
+          </h2>
+
+        </div>
+
+        <button
+          onClick={() => setTab('bookings')}
+          className="rounded-full bg-[#8b5e34] px-5 py-2 text-sm font-semibold text-white hover:bg-[#714a28]"
+        >
+          View All
+        </button>
+
+      </div>
+
+      <div className="mt-6 space-y-4">
+
+        {bookings.slice(0, 6).map((booking) => (
+
+          <div
+            key={booking.id}
+            className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#ece3d8] bg-[#faf7f2] p-4"
           >
-            {label}
-          </button>
-        ))}
-      </nav>
 
-      {loading ? (
-        <p className="text-center text-[#5b6470]">Loading…</p>
-      ) : tab === 'bookings' ? (
+            <div>
+
+              <h3 className="font-bold text-[#1f2937]">
+                {booking.customer_name}
+              </h3>
+
+              <p className="text-sm text-[#5b6470]">
+                {booking.event_title}
+              </p>
+
+              <p className="mt-1 text-xs text-[#8b5e34]">
+                {booking.booking_date}
+              </p>
+
+            </div>
+
+            <div className="text-right">
+
+              <p className="text-lg font-black text-green-700">
+                {formatMoney(booking.total_amount)}
+              </p>
+
+              <StatusBadge
+                label={booking.status}
+                variant="admin"
+                status={booking.status}
+              />
+
+            </div>
+
+          </div>
+
+        ))}
+
+      </div>
+
+    </div>
+
+    {/* RIGHT SIDEBAR */}
+
+    <div className="space-y-6">
+
+      {/* QUICK ACTIONS */}
+
+      <div className="rounded-[2rem] border border-[#e8dfd4] bg-white p-6 shadow-sm">
+
+        <p className="text-xs uppercase tracking-[0.3em] text-[#8b5e34]">
+          Quick Actions
+        </p>
+
+        <h2 className="mt-2 text-2xl font-black text-[#1f2937]">
+          Manage
+        </h2>
+
+        <div className="mt-6 space-y-3">
+
+          <button
+            onClick={() => setTab('bookings')}
+            className="w-full rounded-2xl bg-[#8b5e34] px-5 py-4 text-left font-semibold text-white transition hover:bg-[#714a28]"
+          >
+            Manage Bookings
+          </button>
+
+          <button
+            onClick={() => setTab('events')}
+            className="w-full rounded-2xl bg-[#1f2937] px-5 py-4 text-left font-semibold text-white transition hover:bg-black"
+          >
+            Manage Events
+          </button>
+
+          <button
+            onClick={() => setTab('profit')}
+            className="w-full rounded-2xl bg-green-600 px-5 py-4 text-left font-semibold text-white transition hover:bg-green-700"
+          >
+            Profit Analytics
+          </button>
+
+        </div>
+
+      </div>
+
+      {/* MONTHLY */}
+
+      <div className="rounded-[2rem] border border-[#e8dfd4] bg-white p-6 shadow-sm">
+
+        <p className="text-xs uppercase tracking-[0.3em] text-[#8b5e34]">
+          Revenue
+        </p>
+
+        <h2 className="mt-2 text-2xl font-black text-[#1f2937]">
+          Monthly Profit
+        </h2>
+
+        <div className="mt-6 space-y-4">
+
+          {report?.monthly_profit?.slice(-5).map((m) => (
+
+            <div key={m.month}>
+
+              <div className="mb-2 flex items-center justify-between text-sm">
+
+                <span className="font-medium text-[#5b6470]">
+                  {MONTH_LABELS[m.month - 1]}
+                </span>
+
+                <span className="font-bold text-[#1f2937]">
+                  {formatMoney(m.profit)}
+                </span>
+
+              </div>
+
+              <div className="h-2 overflow-hidden rounded-full bg-[#ece3d8]">
+
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-[#8b5e34] to-[#d2a679]"
+                  style={{
+                    width: `${Math.min((m.profit / (report?.overall_profit || 1)) * 100, 100)}%`,
+                  }}
+                />
+
+              </div>
+
+            </div>
+
+          ))}
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+) : tab === 'profit' ? (
+
+<section className="space-y-8">
+
+  {/* HERO */}
+
+  <div className="overflow-hidden rounded-[2.5rem] bg-gradient-to-r from-[#8b5e34] via-[#a06a3d] to-[#714a28] p-8 text-white shadow-2xl">
+
+    <div className="flex flex-wrap items-center justify-between gap-6">
+
+      <div>
+
+        <p className="text-sm uppercase tracking-[0.35em] text-white/70">
+          EventEase Analytics
+        </p>
+
+        <h1 className="mt-3 text-5xl font-black leading-tight">
+          Profit Report
+        </h1>
+
+        <p className="mt-4 max-w-2xl text-sm text-white/80">
+          Real-time business insights, revenue analytics and booking performance overview.
+        </p>
+
+      </div>
+
+      <div className="rounded-[2rem] bg-white/10 p-6 backdrop-blur">
+
+        <p className="text-xs uppercase tracking-widest text-white/70">
+          Selected Year
+        </p>
+
+        <select
+          value={reportYear}
+          onChange={(e) =>
+            setReportYear(
+              Number(e.target.value)
+            )
+          }
+          className="mt-3 rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-lg font-bold text-white outline-none backdrop-blur"
+        >
+
+          {Array.from({ length: 6 }).map((_, i) => {
+
+            const y =
+              new Date().getFullYear() - i
+
+            return (
+              <option
+                key={y}
+                value={y}
+                className="text-black"
+              >
+                {y}
+              </option>
+            )
+          })}
+
+        </select>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  {/* TOP STATS */}
+
+  <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+
+    <article className="rounded-[2rem] border border-[#ece3d8] bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+
+      <div className="flex items-center justify-between">
+
+        <div>
+
+          <p className="text-xs uppercase tracking-widest text-[#8b5e34]">
+            Overall Profit
+          </p>
+
+          <h2 className="mt-3 text-4xl font-black text-[#1f2937]">
+            {formatMoney(
+              report.overall_profit || 0
+            )}
+          </h2>
+
+        </div>
+
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#f8f1e8] text-3xl">
+          💰
+        </div>
+
+      </div>
+
+    </article>
+
+    <article className="rounded-[2rem] border border-[#ece3d8] bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+
+      <div className="flex items-center justify-between">
+
+        <div>
+
+          <p className="text-xs uppercase tracking-widest text-green-700">
+            Total Bookings
+          </p>
+
+          <h2 className="mt-3 text-4xl font-black text-[#1f2937]">
+            {report.totals?.bookings || 0}
+          </h2>
+
+        </div>
+
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-green-100 text-3xl">
+          📅
+        </div>
+
+      </div>
+
+    </article>
+
+    <article className="rounded-[2rem] border border-[#ece3d8] bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+
+      <div className="flex items-center justify-between">
+
+        <div>
+
+          <p className="text-xs uppercase tracking-widest text-blue-700">
+            Events
+          </p>
+
+          <h2 className="mt-3 text-4xl font-black text-[#1f2937]">
+            {report.totals?.events || 0}
+          </h2>
+
+        </div>
+
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-100 text-3xl">
+          🎉
+        </div>
+
+      </div>
+
+    </article>
+
+    <article className="rounded-[2rem] border border-[#ece3d8] bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+
+      <div className="flex items-center justify-between">
+
+        <div>
+
+          <p className="text-xs uppercase tracking-widest text-pink-700">
+            Packages
+          </p>
+
+          <h2 className="mt-3 text-4xl font-black text-[#1f2937]">
+            {report.totals?.packages || 0}
+          </h2>
+
+        </div>
+
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-pink-100 text-3xl">
+          📦
+        </div>
+
+      </div>
+
+    </article>
+
+  </div>
+
+  {/* ANALYTICS */}
+
+  <div className="grid gap-6 xl:grid-cols-3">
+
+    {/* MONTHLY */}
+
+    <div className="xl:col-span-2 rounded-[2rem] border border-[#ece3d8] bg-white p-6 shadow-sm">
+
+      <div className="flex items-center justify-between">
+
+        <div>
+
+          <p className="text-xs uppercase tracking-[0.3em] text-[#8b5e34]">
+            Revenue Analytics
+          </p>
+
+          <h2 className="mt-2 text-2xl font-black text-[#1f2937]">
+            Monthly Profit
+          </h2>
+
+        </div>
+
+        <span className="rounded-full bg-[#f8f1e8] px-4 py-2 text-xs font-bold text-[#8b5e34]">
+          Dynamic
+        </span>
+
+      </div>
+
+      <div className="mt-8 space-y-5">
+
+        {report.monthly_profit?.map((m) => {
+
+          const maxProfit = Math.max(
+            ...report.monthly_profit.map(
+              (x) => x.profit || 0
+            ),
+            1
+          )
+
+          const width =
+            (m.profit / maxProfit) * 100
+
+          return (
+
+            <div key={m.month}>
+
+              <div className="mb-2 flex items-center justify-between">
+
+                <div>
+
+                  <p className="font-semibold text-[#1f2937]">
+                    {MONTH_LABELS[m.month - 1]}
+                  </p>
+
+                  <p className="text-xs text-[#5b6470]">
+                    Monthly revenue
+                  </p>
+
+                </div>
+
+                <div className="text-right">
+
+                  <p className="text-lg font-black text-[#1f2937]">
+                    {formatMoney(m.profit)}
+                  </p>
+
+                  <p className="text-xs font-medium text-green-700">
+                    {width.toFixed(0)}%
+                  </p>
+
+                </div>
+
+              </div>
+
+              <div className="h-4 overflow-hidden rounded-full bg-[#ece3d8]">
+
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-[#8b5e34] via-[#c28a58] to-[#e7bb89] transition-all duration-1000"
+                  style={{
+                    width: `${width}%`,
+                  }}
+                />
+
+              </div>
+
+            </div>
+          )
+        })}
+
+      </div>
+
+    </div>
+
+    {/* SIDE INSIGHTS */}
+
+    <div className="space-y-6">
+
+      {/* YEARLY */}
+
+      <div className="rounded-[2rem] border border-[#ece3d8] bg-white p-6 shadow-sm">
+
+        <p className="text-xs uppercase tracking-[0.3em] text-[#8b5e34]">
+          Growth
+        </p>
+
+        <h2 className="mt-2 text-2xl font-black text-[#1f2937]">
+          Yearly Profit
+        </h2>
+
+        <div className="mt-6 space-y-5">
+
+          {report.yearly_profit?.map((y) => {
+
+            const maxProfit = Math.max(
+              ...report.yearly_profit.map(
+                (x) => x.profit || 0
+              ),
+              1
+            )
+
+            const width =
+              (y.profit / maxProfit) * 100
+
+            return (
+
+              <div key={y.year}>
+
+                <div className="mb-2 flex items-center justify-between">
+
+                  <span className="font-semibold text-[#1f2937]">
+                    {y.year}
+                  </span>
+
+                  <span className="font-black text-green-700">
+                    {formatMoney(y.profit)}
+                  </span>
+
+                </div>
+
+                <div className="h-3 overflow-hidden rounded-full bg-[#ece3d8]">
+
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-green-500 to-emerald-300 transition-all duration-1000"
+                    style={{
+                      width: `${width}%`,
+                    }}
+                  />
+
+                </div>
+
+              </div>
+            )
+          })}
+
+        </div>
+
+      </div>
+
+      {/* INSIGHTS */}
+
+      <div className="rounded-[2rem] bg-gradient-to-br from-[#1f2937] to-black p-6 text-white shadow-xl">
+
+        <p className="text-xs uppercase tracking-[0.3em] text-white/60">
+          Insights
+        </p>
+
+        <h2 className="mt-2 text-2xl font-black">
+          Business Overview
+        </h2>
+
+        <div className="mt-6 space-y-4">
+
+          <div className="rounded-2xl bg-white/10 p-4">
+
+            <p className="text-xs uppercase tracking-widest text-white/60">
+              Average Revenue
+            </p>
+
+            <h3 className="mt-2 text-2xl font-black">
+
+              {formatMoney(
+                (report.overall_profit || 0) /
+                Math.max(
+                  report.totals?.bookings || 1,
+                  1
+                )
+              )}
+
+            </h3>
+
+          </div>
+
+          <div className="rounded-2xl bg-white/10 p-4">
+
+            <p className="text-xs uppercase tracking-widest text-white/60">
+              Performance
+            </p>
+
+            <h3 className="mt-2 text-2xl font-black text-green-300">
+              Excellent
+            </h3>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+) : tab === 'bookings' ? (
         /* ─── BOOKINGS TAB ─── */
         <div className="space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-4">

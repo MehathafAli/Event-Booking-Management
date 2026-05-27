@@ -499,34 +499,103 @@ const remainingAmount =
     )
   }
 
-  if (submitted) {
+  if (submitted) if (submitted) {
 
   const isPaid =
-
     booking.payment_status ===
     'paid_full'
 
   return (
 
-    <section className="perspective-scene min-h-screen py-16">
+    <section className="perspective-scene relative min-h-screen overflow-hidden py-16">
 
-      <article className="mx-auto max-w-2xl glass-panel-3d p-10 text-center">
+      {/* BACKGROUND GLOW */}
 
-        {/* ICON */}
+      <div className="absolute left-10 top-20 h-72 w-72 rounded-full bg-green-300/20 blur-3xl" />
 
-        <p className="text-6xl">
+      <div className="absolute bottom-10 right-10 h-72 w-72 rounded-full bg-[#8b5e34]/20 blur-3xl" />
 
-          {isPaid ? '✓' : '⏳'}
+      {/* FLOATING ICONS */}
 
-        </p>
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+
+        <span className="absolute left-[10%] top-[15%] animate-bounce text-5xl opacity-20">
+          🎉
+        </span>
+
+        <span className="absolute right-[15%] top-[20%] animate-pulse text-4xl opacity-20">
+          ✨
+        </span>
+
+        <span className="absolute bottom-[20%] left-[20%] animate-bounce text-4xl opacity-20">
+          💖
+        </span>
+
+        <span className="absolute bottom-[15%] right-[20%] animate-pulse text-5xl opacity-20">
+          💸
+        </span>
+
+      </div>
+
+      <article className="relative mx-auto max-w-3xl overflow-hidden rounded-[3rem] border border-white/30 bg-white/80 p-10 text-center shadow-2xl backdrop-blur-xl">
+
+        {/* SUCCESS ICON */}
+
+        <div className="relative mx-auto flex h-44 w-44 items-center justify-center">
+
+          {/* GLOW */}
+
+          <div className="absolute inset-0 animate-pulse rounded-full bg-green-400/30 blur-3xl" />
+
+          {/* OUTER RING */}
+
+          <div className="absolute h-40 w-40 animate-spin-slow rounded-full border-4 border-dashed border-green-300/40" />
+
+          {/* INNER */}
+
+          <div
+            className={`relative flex h-32 w-32 items-center justify-center rounded-full shadow-2xl ${
+              isPaid
+                ? 'bg-gradient-to-br from-green-400 to-emerald-600'
+                : 'bg-gradient-to-br from-[#8b5e34] to-[#d2a679]'
+            }`}
+          >
+
+            <span className="animate-bounce text-7xl text-white">
+
+              {isPaid ? '✓' : '❤'}
+
+            </span>
+
+          </div>
+
+          {/* FLOATING */}
+
+          <span className="absolute left-0 top-6 animate-bounce text-4xl">
+            🎊
+          </span>
+
+          <span className="absolute right-0 top-8 animate-pulse text-4xl">
+            ✨
+          </span>
+
+          <span className="absolute bottom-3 left-6 animate-bounce text-3xl">
+            💖
+          </span>
+
+          <span className="absolute bottom-4 right-5 animate-pulse text-3xl">
+            💸
+          </span>
+
+        </div>
 
         {/* TITLE */}
 
-        <h1 className="mt-5 text-4xl font-bold text-[#1f2937]">
+        <h1 className="mt-10 bg-gradient-to-r from-[#1f2937] to-[#8b5e34] bg-clip-text text-5xl font-black leading-tight text-transparent">
 
           {isPaid
 
-            ? 'Booking Fully Confirmed'
+            ? 'Payment Successful'
 
             : booking.payment_status ===
               'paid_partial'
@@ -539,11 +608,11 @@ const remainingAmount =
 
         {/* DESCRIPTION */}
 
-        <p className="mt-5 text-lg leading-8 text-[#5b6470]">
+        <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-[#5b6470]">
 
           {isPaid
 
-            ? `Your booking for ${booking.event_title} has been fully confirmed and fully paid.`
+            ? `Your booking for ${booking.event_title} has been successfully confirmed with full payment.`
 
             : booking.payment_status ===
               'paid_partial'
@@ -554,97 +623,126 @@ const remainingAmount =
 
         </p>
 
+        {/* SUCCESS CARDS */}
+
+        <div className="mt-10 grid gap-9 sm:grid-cols-3 space-between">
+
+          <div className="rounded-3xl bg-gradient-to-br from-green-50 to-emerald-100 p-6 shadow-sm">
+
+            <p className="text-xs uppercase tracking-widest text-green-700">
+              Payment
+            </p>
+
+            <h3 className="mt-3 text-2xl font-black text-green-800">
+              Successful
+            </h3>
+
+          </div>
+
+          <div className="rounded-3xl bg-gradient-to-br from-[#eefbf3] to-[#dcfce7] p-6 shadow-sm">
+
+            <p className="text-xs uppercase tracking-widest text-green-700">
+              Status
+            </p>
+
+            <h3 className="mt-3 text-2xl font-black text-green-800">
+
+              {booking.display_status ||
+                'Verified'}
+
+            </h3>
+
+          </div>
+
+        </div>
+
         {/* SUMMARY */}
 
-        <div className="mt-8 rounded-[2rem] bg-[#f8f5f0] p-6 text-left">
+        <div className="mt-10 rounded-[2.5rem] border border-[#ece3d8] bg-[#faf7f2]/90 p-8 text-left shadow-inner">
 
-          <div className="space-y-4 text-sm text-[#5b6470]">
+          <div className="flex items-center justify-between">
 
-            {/* EVENT */}
+            <div>
 
-            <div className="flex justify-between">
+              <p className="text-xs uppercase tracking-[0.3em] text-[#8b5e34]">
+                Booking Summary
+              </p>
 
-              <span>
+              <h2 className="mt-2 text-3xl font-black text-[#1f2937]">
+                Order Details
+              </h2>
+
+            </div>
+
+            <div className="rounded-2xl bg-white px-5 py-3 shadow-sm">
+
+              <p className="text-xs uppercase tracking-widest text-[#8b5e34]">
+                Booking ID
+              </p>
+
+              <h3 className="mt-1 text-lg font-black text-[#1f2937]">
+                #{booking.id}
+              </h3>
+
+            </div>
+
+          </div>
+
+          <div className="mt-8 grid gap-5 sm:grid-cols-2">
+
+            <div className="rounded-2xl bg-white p-5 shadow-sm">
+
+              <p className="text-xs uppercase tracking-widest text-[#8b5e34]">
                 Event
-              </span>
+              </p>
 
-              <span className="font-semibold">
-
+              <h3 className="mt-2 text-xl font-black text-[#1f2937]">
                 {booking.event_title}
-
-              </span>
+              </h3>
 
             </div>
 
-            {/* PAYMENT TYPE */}
+            <div className="rounded-2xl bg-white p-5 shadow-sm">
 
-            <div className="flex justify-between">
-
-              <span>
+              <p className="text-xs uppercase tracking-widest text-[#8b5e34]">
                 Payment Type
-              </span>
+              </p>
 
-              <span className="font-semibold capitalize">
-
+              <h3 className="mt-2 text-xl font-black capitalize text-[#1f2937]">
                 {booking.payment_type}
-
-              </span>
-
-            </div>
-
-            {/* TOTAL */}
-
-            <div className="flex justify-between">
-
-              <span>
-                Total Amount
-              </span>
-
-              <span className="font-semibold">
-
-                ₹
-                {booking.total_amount?.toLocaleString()}
-
-              </span>
+              </h3>
 
             </div>
 
-            {/* PAID */}
+            <div className="rounded-2xl bg-white p-5 shadow-sm">
 
-            <div className="flex justify-between">
-
-              <span>
+              <p className="text-xs uppercase tracking-widest text-[#8b5e34]">
                 Amount Paid
-              </span>
+              </p>
 
-              <span className="font-semibold text-green-700">
+              <h3 className="mt-2 text-2xl font-black text-green-700">
 
                 ₹
                 {booking.amount_paid?.toLocaleString()}
 
-              </span>
+              </h3>
 
             </div>
 
-            {/* REMAINING */}
+            <div className="rounded-2xl bg-white p-5 shadow-sm">
 
-            {booking.remaining_amount > 0 && (
+              <p className="text-xs uppercase tracking-widest text-[#8b5e34]">
+                Remaining
+              </p>
 
-              <div className="flex justify-between">
+              <h3 className="mt-2 text-2xl font-black text-red-600">
 
-                <span>
-                  Remaining
-                </span>
+                ₹
+                {booking.remaining_amount?.toLocaleString()}
 
-                <span className="font-semibold text-red-500">
+              </h3>
 
-                  ₹
-                  {booking.remaining_amount?.toLocaleString()}
-
-                </span>
-
-              </div>
-            )}
+            </div>
 
           </div>
 
@@ -652,65 +750,83 @@ const remainingAmount =
 
         {/* STATUS */}
 
-        <p
-          className={`mt-8 inline-block rounded-full px-5 py-3 text-sm font-semibold ${
-            booking.payment_status === 'paid_full'
+        <div className="mt-10">
 
-              ? 'bg-green-100 text-green-800'
+          <span
+            className={`inline-flex rounded-full px-8 py-4 text-sm font-bold shadow-lg ${
+              booking.payment_status ===
+              'paid_full'
 
-              : booking.payment_status === 'paid_partial'
+                ? 'bg-green-100 text-green-800'
 
-              ? 'bg-blue-100 text-blue-800'
+                : booking.payment_status ===
+                  'paid_partial'
 
-              : 'bg-amber-100 text-amber-800'
-          }`}
-        >
+                ? 'bg-blue-100 text-blue-800'
 
-          Status:
-          {' '}
+                : 'bg-amber-100 text-amber-800'
+            }`}
+          >
 
-          {booking.display_status ||
-            'Pending'}
+            {booking.display_status ||
+              'Pending'}
 
-        </p>
+          </span>
 
-        {/* ACTIONS */}
+        </div>
 
-        <div className="mt-10 flex flex-wrap justify-center gap-3">
+        {/* BUTTONS */}
+
+        <div className="mt-12 flex flex-wrap justify-center gap-4">
+
           {booking.remaining_amount > 0 &&
             booking.status === 'Approved' &&
             booking.payment_status === 'paid_partial' && (
-              <button
-                type="button"
-                onClick={() => {
-                  setSubmitted(false)
-                  setPaymentType('full')
-                  setPaymentPhoto(null)
-                  setPreview('')
-                }}
-                className="btn-3d rounded-full bg-[#8b5e34] px-8 py-4 text-sm text-white"
-              >
-                Pay Remaining ₹
-                {booking.remaining_amount?.toLocaleString()}
-              </button>
-            )}
+
+            <button
+              type="button"
+              onClick={() => {
+
+                setSubmitted(false)
+
+                setPaymentType('full')
+
+                setPaymentPhoto(null)
+
+                setPreview('')
+              }}
+              className="rounded-full bg-gradient-to-r from-[#8b5e34] to-[#d2a679] px-10 py-5 text-sm font-bold text-white shadow-xl transition hover:scale-105"
+            >
+
+              Pay Remaining ₹
+              {booking.remaining_amount?.toLocaleString()}
+
+            </button>
+          )}
 
           {user ? (
+
             <Link
               to="/dashboard"
-              className="btn-3d inline-block rounded-full border border-[#d9c9b8] bg-white px-8 py-4 text-sm font-semibold text-[#8b5e34]"
+              className="rounded-full border border-[#d9c9b8] bg-white px-10 py-5 text-sm font-bold text-[#8b5e34] shadow-lg transition hover:-translate-y-1 hover:shadow-xl"
             >
               Go to Dashboard
             </Link>
+
           ) : (
+
             <Link
               to="/login"
-              state={{ from: '/dashboard' }}
-              className="btn-3d inline-block rounded-full border border-[#d9c9b8] bg-white px-8 py-4 text-sm font-semibold text-[#8b5e34]"
+              state={{
+                from: '/dashboard',
+              }}
+              className="rounded-full border border-[#d9c9b8] bg-white px-10 py-5 text-sm font-bold text-[#8b5e34] shadow-lg transition hover:-translate-y-1 hover:shadow-xl"
             >
               Login to View Dashboard
             </Link>
+
           )}
+
         </div>
 
       </article>

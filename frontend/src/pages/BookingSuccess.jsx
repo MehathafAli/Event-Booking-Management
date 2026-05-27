@@ -184,6 +184,7 @@ export default function BookingSuccess() {
                 </label>
                 <input
                   type="text"
+                  placeholder="Ali"
                   value={customerDetails.fullName}
                   onChange={handleChange('fullName')}
                   required
@@ -206,7 +207,7 @@ export default function BookingSuccess() {
                   inputMode="numeric"
                   pattern="[6-9][0-9]{9}"
                   maxLength={14}
-                  placeholder="9876543210"
+                  placeholder="7386434617"
                   className="input-3d mt-2 text-sm"
                 />
                 {fieldErrors.phone && (
@@ -223,7 +224,7 @@ export default function BookingSuccess() {
                   value={customerDetails.email}
                   onChange={handleChange('email')}
                   required
-                  placeholder="you@example.com"
+                  placeholder="Give us your email to send the receipt"
                   className="input-3d mt-2 text-sm"
                 />
                 {fieldErrors.email && (
