@@ -96,13 +96,13 @@ DATABASES = {
         'django.db.backends.mysql',
 
         'NAME':
-        'Event',
+        'Ali',
 
         'USER':
         'root',
 
         'PASSWORD':
-        'root@123',
+        'Ali@78612',
 
         'HOST':
         'localhost',

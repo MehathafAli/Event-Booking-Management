@@ -258,35 +258,7 @@ export default function AdminDashboard() {
 
   return (
     <section className="mx-auto mt-8 max-w-[1400px] space-y-6 px-5 pb-16">
-      {/* Header */}
-      <header className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#d9c9b8] bg-white p-6 shadow-sm">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#8b5e34]">
-            Admin Portal
-          </p>
-          <h1 className="mt-1 text-2xl font-bold text-[#1f2937]">
-            Dashboard
-          </h1>
-          <p className="text-sm text-[#5b6470]">
-            Signed in as {admin.username}
-          </p>
-        </div>
-        <div className="flex flex-wrap gap-3">
-          <Link
-            to="/"
-            className="rounded-full border border-[#d9c9b8] px-5 py-2 text-sm font-medium text-[#1f2937] hover:bg-[#faf7f2]"
-          >
-            View Site
-          </Link>
-          <button
-            type="button"
-            onClick={handleLogout}
-            className="rounded-full bg-[#8b5e34] px-5 py-2 text-sm font-medium text-white hover:bg-[#714a28]"
-          >
-            Logout
-          </button>
-        </div>
-      </header>
+    
 
       {/* Tabs */}
       <nav className="flex flex-wrap gap-2">

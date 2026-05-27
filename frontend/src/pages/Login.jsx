@@ -14,6 +14,7 @@ export default function Login() {
   const location = useLocation()
 
   const { login } = useAuth()
+  
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -277,109 +278,3 @@ export default function Login() {
 
 
 
-
-
-/*import { useState } from 'react'
-import { useNavigate, Link, useLocation } from 'react-router-dom'
-import API from '../services/api'
-import { useAuth } from '../context/AuthContext'
-
-export default function Login() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
-  const location = useLocation()
-  const { login } = useAuth()
-
-  const handleLogin = async (e) => {
-    e.preventDefault()
-    setError('')
-    setLoading(true)
-
-    try {
-      const response = await API.post('login/', {
-        email,
-        password,
-      })
-
-      if (response.data.access) {
-        login(
-          {
-            email,
-            username: response.data.user?.username || email.split('@')[0],
-          },
-          response.data.access
-        )
-        navigate('/events')
-      }
-    } catch (err) {
-      const errorData = err.response?.data
-      const serverMessage =
-        errorData?.detail ||
-        (Array.isArray(errorData?.non_field_errors) && errorData.non_field_errors[0]) ||
-        'Login failed. Please check your credentials.'
-
-      if (typeof serverMessage === 'string' && serverMessage.includes('Account not found')) {
-        setError('Account not found. Please register here.')
-      } else {
-        setError(serverMessage)
-      }
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const successMessage = location.state?.message
-
-  return (
-    <div className="mx-auto max-w-xl rounded-3xl bg-white p-10 shadow-lg">
-      <h1 className="text-3xl font-semibold">Login</h1>
-      <p className="mt-2 text-slate-500">Access your EventEase account and manage your bookings.</p>
-      {successMessage && (
-        <div className="mt-6 rounded-3xl bg-green-50 px-4 py-3 text-green-700">{successMessage}</div>
-      )}
-      {error && (
-        <div className="mt-6 rounded-3xl bg-red-50 px-4 py-3 text-red-700">{error}</div>
-      )}
-      <form onSubmit={handleLogin} className="mt-8 space-y-6">
-        <div>
-          <label className="block text-sm font-medium text-slate-700">Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3"
-            placeholder="you@example.com"
-            required
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-slate-700">Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3"
-            placeholder="Enter your password"
-            required
-          />
-        </div>
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded-3xl bg-sky-600 px-5 py-3 text-white hover:bg-sky-700 disabled:bg-gray-400"
-        >
-          {loading ? 'Logging in...' : 'Login'}
-        </button>
-      </form>
-      <p className="mt-6 text-center text-slate-600">
-        Don't have an account?{' '}
-        <Link to="/register" className="text-sky-600 hover:underline">
-          Register here
-        </Link>
-      </p>
-    </div>
-  )
-}*/
