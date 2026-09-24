@@ -1,14 +1,21 @@
 from pathlib import Path
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'replace-this-with-your-own-secret'
+SECRET_KEY = os.environ.get(
+    'DJANGO_SECRET_KEY',
+    'replace-this-with-your-own-secret'
+)
 
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
 ALLOWED_HOSTS = ['*']
 
+
+# =========================================================
 # APPS
+# =========================================================
 
 INSTALLED_APPS = [
 
@@ -20,23 +27,20 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # THIRD PARTY
-
     'rest_framework',
-
     'corsheaders',
 
     # APPS
-
     'users',
-
     'events',
-
     'bookings',
-
     'adminauth2',
 ]
 
+
+# =========================================================
 # MIDDLEWARE
+# =========================================================
 
 MIDDLEWARE = [
 
@@ -57,14 +61,18 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
 ROOT_URLCONF = 'core.urls'
 
+
+# =========================================================
 # TEMPLATES
+# =========================================================
 
 TEMPLATES = [
     {
         'BACKEND':
-        'django.template.backends.django.DjangoTemplates',
+            'django.template.backends.django.DjangoTemplates',
 
         'DIRS': [],
 
@@ -85,59 +93,62 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'core.wsgi.application'
 
+
+# =========================================================
 # DATABASE
+# =========================================================
 
 DATABASES = {
     'default': {
+        'ENGINE': 'django.db.backends.mysql',
 
-        'ENGINE':
-        'django.db.backends.mysql',
+        'NAME': os.environ.get('MYSQLDATABASE'),
 
-        'NAME':
-        'Ali',
+        'USER': os.environ.get('MYSQLUSER'),
 
-        'USER':
-        'root',
+        'PASSWORD': os.environ.get('MYSQLPASSWORD'),
 
-        'PASSWORD':
-        'Ali@78612',
+        'HOST': os.environ.get('MYSQLHOST'),
 
-        'HOST':
-        'localhost',
-
-        'PORT':
-        '3306',
+        'PORT': os.environ.get('MYSQLPORT', '3306'),
     }
 }
 
-# PASSWORDS
+
+# =========================================================
+# PASSWORD VALIDATION
+# =========================================================
 
 AUTH_PASSWORD_VALIDATORS = [
 
     {
         'NAME':
-        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+            'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
 
     {
         'NAME':
-        'django.contrib.auth.password_validation.MinimumLengthValidator',
+            'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
 
     {
         'NAME':
-        'django.contrib.auth.password_validation.CommonPasswordValidator',
+            'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
 
     {
         'NAME':
-        'django.contrib.auth.password_validation.NumericPasswordValidator',
+            'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
 
+
+# =========================================================
 # LANGUAGE
+# =========================================================
 
 LANGUAGE_CODE = 'en-us'
 
@@ -147,27 +158,40 @@ USE_I18N = True
 
 USE_TZ = True
 
+
+# =========================================================
 # STATIC
+# =========================================================
 
 STATIC_URL = 'static/'
 
+
+# =========================================================
 # MEDIA
+# =========================================================
 
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = BASE_DIR / 'media'
 
+
+# =========================================================
 # DEFAULT
+# =========================================================
 
-DEFAULT_AUTO_FIELD = (
-    'django.db.models.BigAutoField'
-)
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+# =========================================================
 # CORS
+# =========================================================
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+
+# =========================================================
 # REST FRAMEWORK
+# =========================================================
 
 REST_FRAMEWORK = {
 
@@ -182,8 +206,10 @@ REST_FRAMEWORK = {
     ),
 }
 
+
+# =========================================================
 # EMAIL CONFIGURATION
-# EMAIL CONFIGURATION
+# =========================================================
 
 EMAIL_BACKEND = (
     'django.core.mail.backends.smtp.EmailBackend'
@@ -195,20 +221,16 @@ EMAIL_PORT = 587
 
 EMAIL_USE_TLS = True
 
-# YOUR GMAIL
-
-EMAIL_HOST_USER = (
-    'shaikmehathafali786@gmail.com'
+EMAIL_HOST_USER = os.environ.get(
+    'EMAIL_HOST_USER',
+    'your-email@gmail.com'
 )
 
-# GOOGLE APP PASSWORD
-
-EMAIL_HOST_PASSWORD = (
-    'wubkwkwyhrhgvrlg'
+EMAIL_HOST_PASSWORD = os.environ.get(
+    'EMAIL_HOST_PASSWORD'
 )
 
-# DEFAULT SENDER
-
-DEFAULT_FROM_EMAIL = (
-    'EventEase <shaikmehathafali786@gmail.com>'
+DEFAULT_FROM_EMAIL = os.environ.get(
+    'DEFAULT_FROM_EMAIL',
+    'EventEase <your-email@gmail.com>'
 )
