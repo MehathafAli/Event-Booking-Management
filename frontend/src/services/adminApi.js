@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const adminApi = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api/',
+  baseURL: 'https://event-booking-management-production.up.railway.app/api/',
   timeout: 20000,
 })
 
