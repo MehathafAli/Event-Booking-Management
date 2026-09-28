@@ -211,26 +211,45 @@ REST_FRAMEWORK = {
 # EMAIL CONFIGURATION
 # =========================================================
 
-EMAIL_BACKEND = (
-    'django.core.mail.backends.smtp.EmailBackend'
-)
+# EMAIL CONFIGURATION # EMAIL CONFIGURATION
+EMAIL_BACKEND = ( 'django.core.mail.backends.smtp.EmailBackend' ) 
+EMAIL_HOST = 'smtp.gmail.com' EMAIL_PORT = 587 EMAIL_USE_TLS = True
+# YOUR GMAIL
+EMAIL_HOST_USER = ( 'shaikmehathafali786@gmail.com' ) 
+# GOOGLE APP PASSWORD 
+EMAIL_HOST_PASSWORD = ( 'wubkwkwyhrhgvrlg' ) 
+# DEFAULT SENDER 
+DEFAULT_FROM_EMAIL = ( 'EventEase <shaikmehathafali786@gmail.com>' )
 
-EMAIL_HOST = 'smtp.gmail.com'
 
-EMAIL_PORT = 587
 
-EMAIL_USE_TLS = True
 
-EMAIL_HOST_USER = os.environ.get(
-    'EMAIL_HOST_USER',
-    'your-email@gmail.com'
-)
 
-EMAIL_HOST_PASSWORD = os.environ.get(
-    'EMAIL_HOST_PASSWORD'
-)
 
-DEFAULT_FROM_EMAIL = os.environ.get(
-    'DEFAULT_FROM_EMAIL',
-    'EventEase <your-email@gmail.com>'
-)
+
+
+
+
+# EMAIL_BACKEND = (
+#     'django.core.mail.backends.smtp.EmailBackend'
+# )
+
+# EMAIL_HOST = 'smtp.gmail.com'
+
+# EMAIL_PORT = 587
+
+# EMAIL_USE_TLS = True
+
+# EMAIL_HOST_USER = os.environ.get(
+#     'EMAIL_HOST_USER',
+#     'your-email@gmail.com'
+# )
+
+# EMAIL_HOST_PASSWORD = os.environ.get(
+#     'EMAIL_HOST_PASSWORD'
+# )
+
+# DEFAULT_FROM_EMAIL = os.environ.get(
+#     'DEFAULT_FROM_EMAIL',
+#     'EventEase <your-email@gmail.com>'
+# )
