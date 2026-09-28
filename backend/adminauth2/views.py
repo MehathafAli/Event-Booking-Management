@@ -355,237 +355,188 @@ class AdminApproveBookingView(APIView):
                 }
             )
 
-        # APPROVE
+        APPROVE
 
-#         booking.status = (
-#             'Approved'
-#         )
+        booking.status = (
+            'Approved'
+        )
 
-#         booking.is_confirmed = True
+        booking.is_confirmed = True
 
-#         # PAYMENT STATUS
+        # PAYMENT STATUS
 
-#         if (
+        if (
 
-#             booking.amount_paid >=
-#             booking.total_amount
+            booking.amount_paid >=
+            booking.total_amount
 
-#         ):
+        ):
 
-#             booking.payment_status = (
-#                 'paid_full'
-#             )
+            booking.payment_status = (
+                'paid_full'
+            )
 
-#         elif booking.amount_paid > 0:
+        elif booking.amount_paid > 0:
 
-#             booking.payment_status = (
-#                 'paid_partial'
-#             )
+            booking.payment_status = (
+                'paid_partial'
+            )
 
-#         else:
+        else:
 
-#             booking.payment_status = (
-#                 'unpaid'
-#             )
+            booking.payment_status = (
+                'unpaid'
+            )
 
-#         from django.utils import (
-#             timezone
-#         )
+        from django.utils import (
+            timezone
+        )
 
-#         booking.paid_at = (
-#             timezone.now()
-#         )
+        booking.paid_at = (
+            timezone.now()
+        )
 
-#         booking.remaining_amount = max(
+        booking.remaining_amount = max(
 
-#             booking.total_amount -
-#             booking.amount_paid,
+            booking.total_amount -
+            booking.amount_paid,
 
-#             0
-#         )
+            0
+        )
 
-#         booking.save()
+        booking.save()
 
-#         # CUSTOMER EMAIL
+        # CUSTOMER EMAIL
 
-#         customer_email = (
+        customer_email = (
 
-#             booking.customer_email
+            booking.customer_email
 
-#             or (
+            or (
 
-#                 booking.user.email
+                booking.user.email
 
-#                 if booking.user
+                if booking.user
 
-#                 else None
-#             )
-#         )
+                else None
+            )
+        )
 
-#         # SEND EMAIL
+        # SEND EMAIL
 
-#         if customer_email:
+        if customer_email:
 
-#             package_details = ''
+            package_details = ''
 
-#             for item in (
-#                 booking.package_items
-#             ):
+            for item in (
+                booking.package_items
+            ):
 
-#                 line_total = (
+                line_total = (
 
-#                     item.get(
-#                         'line_total'
-#                     )
+                    item.get(
+                        'line_total'
+                    )
 
-#                     or
+                    or
 
-#                     (
-#                         item.get(
-#                             'price',
-#                             0
-#                         ) *
+                    (
+                        item.get(
+                            'price',
+                            0
+                        ) *
 
-#                         item.get(
-#                             'quantity',
-#                             1
-#                         )
-#                     )
-#                 )
+                        item.get(
+                            'quantity',
+                            1
+                        )
+                    )
+                )
 
-#                 package_details += (
+                package_details += (
 
-#                     f"- {item.get('name')} "
+                    f"- {item.get('name')} "
 
-#                     f"(Qty: {item.get('quantity', 1)}) "
+                    f"(Qty: {item.get('quantity', 1)}) "
 
-#                     f"(₹{line_total})\n"
-#                 )
+                    f"(₹{line_total})\n"
+                )
 
-#             send_mail(
+            send_mail(
 
-#                 subject=
-#                 f'{booking.event.title} Booking Approved',
+                subject=
+                f'{booking.event.title} Booking Approved',
 
-#                 message=f'''
-# Hello {booking.customer_name},
+                message=f'''
+Hello {booking.customer_name},
 
-# Your booking has been approved successfully.
+Your booking has been approved successfully.
 
-# EVENT DETAILS
-# -------------------------
-# Event:
-# {booking.event.title}
+EVENT DETAILS
+-------------------------
+Event:
+{booking.event.title}
 
-# Location:
-# {booking.location}
+Location:
+{booking.location}
 
-# Date:
-# {booking.booking_date}
+Date:
+{booking.booking_date}
 
-# PAYMENT DETAILS
-# -------------------------
-# Payment Type:
-# {booking.payment_type}
+PAYMENT DETAILS
+-------------------------
+Payment Type:
+{booking.payment_type}
 
-# Total Amount:
-# ₹{booking.total_amount}
+Total Amount:
+₹{booking.total_amount}
 
-# Amount Paid:
-# ₹{booking.amount_paid}
+Amount Paid:
+₹{booking.amount_paid}
 
-# Remaining Amount:
-# ₹{booking.remaining_amount}
+Remaining Amount:
+₹{booking.remaining_amount}
 
-# Payment Status:
-# {booking.payment_status}
+Payment Status:
+{booking.payment_status}
 
-# BOOKED PACKAGE
-# -------------------------
-# {package_details}
+BOOKED PACKAGE
+-------------------------
+{package_details}
 
-# IMPORTANT
-# -------------------------
-# Please pay the remaining amount before the event date.
+IMPORTANT
+-------------------------
+Please pay the remaining amount before the event date.
 
-# Thank you for choosing EventEase.
-# ''',
+Thank you for choosing EventEase.
+''',
 
-#                 from_email=None,
+                from_email=None,
 
-#                 recipient_list=[
-#                     customer_email
-#                 ],
+                recipient_list=[
+                    customer_email
+                ],
 
-#                 fail_silently=False,
-#             )
+                fail_silently=False,
+            )
 
-#         return Response(
+        return Response(
 
-#             {
+            {
 
-#                 'message':
-#                 'Booking approved successfully.',
+                'message':
+                'Booking approved successfully.',
 
-#                 'booking':
-#                 BookingSerializer(
+                'booking':
+                BookingSerializer(
 
-#                     booking,
+                    booking,
 
-#                     context={
-#                         'request':
-#                         request
-#                     }
-#                 ).data,
-#             }
-#         )
+                    context={
+                        'request':
+                        request
+                    }
+                ).data,
+            }
+        )
 
-# APPROVE
-booking.status = 'Approved'
-booking.is_confirmed = True
-
-if booking.amount_paid >= booking.total_amount:
-    booking.payment_status = 'paid_full'
-elif booking.amount_paid > 0:
-    booking.payment_status = 'paid_partial'
-else:
-    booking.payment_status = 'unpaid'
-
-from django.utils import timezone
-
-booking.paid_at = timezone.now()
-
-booking.remaining_amount = max(
-    booking.total_amount - booking.amount_paid,
-    0
-)
-
-booking.save()
-
-# CUSTOMER EMAIL
-customer_email = (
-    booking.customer_email
-    or (
-        booking.user.email
-        if booking.user and booking.user.email
-        else None
-    )
-)
-
-email_sent = False
-
-if customer_email:
-    try:
-        # Your existing approval email function here
-        email_sent = send_booking_approval_email(booking)
-    except Exception:
-        email_sent = False
-
-return Response({
-    'message': 'Booking approved successfully.',
-    'email_sent': email_sent,
-    'booking': BookingSerializer(
-        booking,
-        context={'request': request}
-    ).data,
-})
